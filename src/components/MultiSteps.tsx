@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Button, Paper, Typography, Box, Chip } from '@mui/material';
+import  { useState } from 'react';
+import { Button, Paper, Typography, Box } from '@mui/material';
 import stepsData from './steps.json'; // Import the JSON file directly
 
 interface Step {
