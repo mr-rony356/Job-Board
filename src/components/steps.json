@@ -1,0 +1,89 @@
+{
+  "steps": [
+    {
+      "label": "State >",
+      "question":"Which State are you looking for?",
+      "options": [
+        "Florida",
+        "District of Columbia",
+        "New York",
+        "Texas",
+        "Illinois",
+        "California",
+        "Remote"
+      ]
+    },
+    {
+      "label": "City >",
+      "question":"Which City are you looking for?",
+      "options": {
+        "Florida": [
+          "Miami",
+          "Fort Lauderdale",
+          "Boca",
+          "West Palm Beach",
+          "Tampa",
+          "Orlando",
+          "Tallahassee",
+          "Jacksonville",
+          "Other"
+        ],
+        "District of Columbia": [
+          "D.C."
+        ],
+        "New York": [
+          "New York"
+        ],
+        "California": [
+          "San Francisco",
+          "Los Angeles",
+          "San Diego"
+        ],
+        "Texas": [
+          "Dallas",
+          "Houston",
+          "Austin"
+        ],
+        "Illinois": [
+          "Chicago"
+        ]
+      }
+    },
+    {
+      "label": "Practice Area >",
+      "question":"Which Area are you looking for?",
+
+      "options": [
+        "Corporate",
+        "Litigation"
+      ]
+    },
+    {
+      "label": "Cases >",
+      "question":"Which State are you looking for?",
+
+      "options": [
+        "2013+"
+      ]
+    },
+    {
+      "label": "Size ",
+      "question":"Which State are you looking for?",
+
+      "options": [
+        "2024",
+        "2023",
+        "2022",
+        "2021",
+        "2020",
+        "2019",
+        "2018",
+        "2017",
+        "2016",
+        "2015",
+        "2014",
+        "2013+"
+      ]
+    }
+  ]
+}
