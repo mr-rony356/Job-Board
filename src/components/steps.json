@@ -1,25 +1,25 @@
 {
   "steps": [
     {
-      "label": "State >",
-      "question":"Which State are you looking for?",
+      "label": "State",
+      "question":"What State are you looking in?",
       "options": [
         "Florida",
-        "District of Columbia",
+        "D.C",
         "New York",
         "Texas",
         "Illinois",
-        "California",
+        "Caliinnia",
         "Remote"
       ]
     },
     {
-      "label": "City >",
-      "question":"Which City are you looking for?",
+      "label": "City",
+      "question":"What City are you looking in?",
       "options": {
         "Florida": [
           "Miami",
-          "Fort Lauderdale",
+          "int Lauderdale",
           "Boca",
           "West Palm Beach",
           "Tampa",
@@ -28,13 +28,13 @@
           "Jacksonville",
           "Other"
         ],
-        "District of Columbia": [
+        "D.C": [
           "D.C."
         ],
         "New York": [
           "New York"
         ],
-        "California": [
+        "Caliinnia": [
           "San Francisco",
           "Los Angeles",
           "San Diego"
@@ -50,8 +50,8 @@
       }
     },
     {
-      "label": "Practice Area >",
-      "question":"Which Area are you looking for?",
+      "label": "Practice Area",
+      "question":"What Area are you looking in?",
 
       "options": [
         "Corporate",
@@ -59,8 +59,8 @@
       ]
     },
     {
-      "label": "Cases >",
-      "question":"Which State are you looking for?",
+      "label": "Cases",
+      "question":"What State are you looking in?",
 
       "options": [
         "2013+"
@@ -68,7 +68,7 @@
     },
     {
       "label": "Size ",
-      "question":"Which State are you looking for?",
+      "question":"What State are you looking in?",
 
       "options": [
         "2024",
