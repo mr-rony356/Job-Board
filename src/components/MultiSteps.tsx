@@ -78,7 +78,7 @@ const JobSearchForm = () => {
         <Typography variant="h2" style={{
           color: 'white',
           marginBottom: '50px',
-          fontFamily: 'Times New Roman',
+          fontFamily: 'inherit',
           textAlign: 'center',
           fontSize:isMobile?'2.2rem':'3rem',
           letterSpacing:'5px'
@@ -102,7 +102,7 @@ const JobSearchForm = () => {
                   fontWeight: '500',
                   borderRadius: '0px',
                   fontSize: '16px',
-                  fontFamily: "Times New Roman",
+                  fontFamily: "inherit",
                   padding:'0 15px',
                   textTransform:'capitalize',
                   letterSpacing:'3px'
@@ -133,7 +133,7 @@ const JobSearchForm = () => {
                           fontWeight: '500',
                           borderRadius: '0px',
                           fontSize: '16px',
-                          fontFamily: "Times New Roman",
+                          fontFamily: "inherit",
                           padding:'0 15px',
                           textTransform:'capitalize',
                           letterSpacing:'3px'
@@ -161,7 +161,7 @@ const JobSearchForm = () => {
 
     return (
       <Box sx={{ display: 'flex', width: '100%', flexDirection: 'column', marginBottom: '50px' }}>
-        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+        <Box sx={{ display: 'flex', justifyContent: 'center',flexWrap:'wrap' }}>
           {steps.map((stepItem, index) => (
             <Box key={index} style={{ padding: '20px 5px' }}>
               <Typography variant="h2" style={{ color: step === index + 1 ? '#4caf50' : 'white', fontWeight:'500', fontSize: isMobile?'10px':'18px',letterSpacing:'3px' ,fontFamily: 'Times New Roman' }}>
@@ -199,7 +199,7 @@ const JobSearchForm = () => {
               fontWeight:'900',
               fontSize: '25px',
               padding: '5px 10px',
-              fontFamily:'Times New Roman',
+              fontFamily:'inherit',
               width:isMobile?'80vw':'20vw',
               '&:hover': {
                 backgroundColor: 'black',

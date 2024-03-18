@@ -24,11 +24,11 @@ const Joblisting: React.FC = () => {
     >
       <Container maxWidth="md">
         <Typography variant="h1" sx={{
-          fontSize: isMobile ? '2.2rem' : '3rem', // Adjust font size for mobile
+          fontSize: isMobile ? '1.8rem' : '3rem', // Adjust font size for mobile
           marginBottom: theme.spacing(2),
           fontFamily: 'inherit',
           color: theme.palette.primary.contrastText,
-          padding:isMobile?'10px':'0',
+          padding:isMobile?'0':'10',
           letterSpacing:'5px',
           fontWeight:'500'
         }}>
