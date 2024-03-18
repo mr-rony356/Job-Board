@@ -10,7 +10,7 @@
 }
 body, html {
   margin: 0;
-  background: linear-gradient(rgb(37 37 37), rgb(10 14 19 / 64%)), url(bg.jpg) 50% no-repeat;
+  background: linear-gradient(rgb(37 37 37), rgb(10 14 19 / 64%)), url(./assets/bg.jpg) 50% no-repeat;
   color: white;
   font-family: 'Times New Roman', Times, serif !important;
   background-repeat: no-repeat;
