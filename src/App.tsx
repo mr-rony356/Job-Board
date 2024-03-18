@@ -5,6 +5,7 @@ import { Footer } from "./components/Footer";
 import { Box } from "@mui/material";
 import MultiSteps from './components/MultiSteps'
 import Joblisting from "./components/Joblisting";
+import { JobDetails } from "./pages/JobDetails";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/multi" element={<MultiSteps />} />
         <Route path="/" element={<Joblisting />} />
+        <Route path="/job-details" element={<JobDetails />} />
         </Routes>
         <Footer />
       </Box>

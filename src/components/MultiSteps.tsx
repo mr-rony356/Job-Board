@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { Button, Paper, Typography, Box } from '@mui/material';
 import stepsData from './steps.json'; // Import the JSON file directly
-import {  useMediaQuery, useTheme } from '@mui/material'
+import { useMediaQuery, useTheme } from '@mui/material'
+import { Link } from 'react-router-dom';
 
 
 
@@ -80,8 +81,8 @@ const JobSearchForm = () => {
           marginBottom: '50px',
           fontFamily: 'inherit',
           textAlign: 'center',
-          fontSize:isMobile?'2.2rem':'3rem',
-          letterSpacing:'5px'
+          fontSize: isMobile ? '2.2rem' : '3rem',
+          letterSpacing: '5px'
         }}>
           {question}
         </Typography>
@@ -101,11 +102,11 @@ const JobSearchForm = () => {
                   cursor: 'pointer',
                   fontWeight: '500',
                   borderRadius: '0px',
-                  fontSize: '16px',
+                  fontSize: isMobile?'16px ':'18px',
                   fontFamily: "inherit",
-                  padding:'0 15px',
-                  textTransform:'capitalize',
-                  letterSpacing:'3px'
+                  padding: '0 15px',
+                  textTransform: 'capitalize',
+                  letterSpacing: '3px'
                 }}
               >
                 {option}
@@ -116,7 +117,7 @@ const JobSearchForm = () => {
               if (key === state) {
                 return (
 
-                  <Box key={key} sx={{ display: 'flex', alignItems: 'center',flexWrap:'wrap', justifyContent:'center'}}>
+                  <Box key={key} sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
                     {value.map((option) => (
                       <Button
                         key={option}
@@ -132,12 +133,12 @@ const JobSearchForm = () => {
                           cursor: 'pointer',
                           fontWeight: '500',
                           borderRadius: '0px',
-                          fontSize: '16px',
+                          fontSize: isMobile?'16px ':'18px',
                           fontFamily: "inherit",
-                          padding:'0 15px',
-                          textTransform:'capitalize',
-                          letterSpacing:'3px'
-        
+                          padding: '0 15px',
+                          textTransform: 'capitalize',
+                          letterSpacing: '3px'
+
 
                         }}
                       >
@@ -161,11 +162,11 @@ const JobSearchForm = () => {
 
     return (
       <Box sx={{ display: 'flex', width: '100%', flexDirection: 'column', marginBottom: '50px' }}>
-        <Box sx={{ display: 'flex', justifyContent: 'center',flexWrap:'wrap' }}>
+        <Box sx={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap' }}>
           {steps.map((stepItem, index) => (
             <Box key={index} style={{ padding: '20px 5px' }}>
-              <Typography variant="h2" style={{ color: step === index + 1 ? '#4caf50' : 'white', fontWeight:'500', fontSize: isMobile?'10px':'18px',letterSpacing:'3px' ,fontFamily: 'Times New Roman' }}>
-                {stepItem.label +'>' }
+              <Typography variant="h2" style={{ color: step === index + 1 ? '#4caf50' : 'white', fontWeight: '500', fontSize: isMobile ? '10px' : '18px', letterSpacing: '3px', fontFamily: 'Times New Roman' }}>
+                {stepItem.label + '>'}
               </Typography>
             </Box>
           ))}
@@ -173,7 +174,7 @@ const JobSearchForm = () => {
         {/* Render steps */}
         <Box sx={{ display: 'flex', width: '100%', justifyContent: 'center', color: 'white' }}>
           {steps.map((stepItem, index) => (
-            <Box key={index} style={{ padding:isMobile?'20px 0px':'20px 5px' }}>
+            <Box key={index} style={{ padding: isMobile ? '20px 0px' : '20px 5px' }}>
               {step === index + 1 && (
                 <Box sx={{ color: 'white' }}>
                   {renderOptions(stepItem)}
@@ -187,7 +188,17 @@ const JobSearchForm = () => {
   };
 
   return (
-    <Paper elevation={3} style={{ padding: '20px', maxWidth: '100%', margin: 'auto', background: 'transparent', height:isMobile?'100vh' :'80vh', display: 'flex', justifyContent: 'start', flexDirection: 'column', alignItems: 'center' }}>
+              <Paper elevation={3} style={{
+                padding: '20px',
+                maxWidth: '100%',
+                margin: 'auto',
+                background: 'transparent',
+                height: isMobile ? '100vh' : '80vh',
+                display: 'flex',
+                justifyContent: isMobile ? 'start' : 'center',
+                flexDirection: 'column',
+                alignItems: 'center'
+              }}>
       {renderStep()}
       <Box>
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
@@ -196,11 +207,12 @@ const JobSearchForm = () => {
             sx={{
               backgroundColor: '#19ff85',
               color: 'black',
-              fontWeight:'900',
-              fontSize: '25px',
+              fontWeight: '900',
+              fontSize: '2.5rem',
               padding: '5px 10px',
-              fontFamily:'inherit',
-              width:isMobile?'80vw':'20vw',
+              fontFamily:'sans-serif',
+              width: isMobile ? '80vw' : '20vw',
+              lineHeight:'1.2',
               '&:hover': {
                 backgroundColor: 'black',
                 color: '#19ff85',
@@ -208,13 +220,13 @@ const JobSearchForm = () => {
               },
             }}
           >
-            {step < steps.length ? 'Next' : 'Show Qualified Opportunities'}
+            {step < steps.length ? 'Next' : <Link to='/job-details'>show qualified opportunities</Link>}
           </Button>
 
           {
             step != 1 &&
             <Button disabled={step === 1} onClick={handlePrevious} sx={{
-              fontSize: '12px',  color: '#19ff85', fontWeight:'bold', padding: '10px', '&:hover': {
+              fontSize: '12px', color: '#19ff85', fontWeight: 'bold', padding: '10px', '&:hover': {
                 border: '1px solid #19ff85 '
               }
             }}>

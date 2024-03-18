@@ -65,11 +65,12 @@ const Joblisting: React.FC = () => {
             sx={{
               backgroundColor: '#19ff85',
               color: 'black',
-              fontWeight: '600',
-              fontSize: '30px',
+              fontWeight: '900',
+              fontSize: isMobile?'2rem':'3rem',
               padding: isMobile ? '10px 120px' : '10px 150px',
-              fontFamily: 'inherit',
+              fontFamily:'sans-serif',
               border: '1px solid #19ff85 ',
+              lineHeight:'1',
 
               '&:hover': {
                 backgroundColor: 'black',
