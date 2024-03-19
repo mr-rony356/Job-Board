@@ -102,7 +102,7 @@ const JobSearchForm = () => {
                   cursor: 'pointer',
                   fontWeight: '500',
                   borderRadius: '0px',
-                  fontSize: isMobile?'16px ':'18px',
+                  fontSize: isMobile ? '16px ' : '18px',
                   fontFamily: "inherit",
                   padding: '0 15px',
                   textTransform: 'capitalize',
@@ -133,7 +133,7 @@ const JobSearchForm = () => {
                           cursor: 'pointer',
                           fontWeight: '500',
                           borderRadius: '0px',
-                          fontSize: isMobile?'16px ':'18px',
+                          fontSize: isMobile ? '16px ' : '18px',
                           fontFamily: "inherit",
                           padding: '0 15px',
                           textTransform: 'capitalize',
@@ -188,40 +188,72 @@ const JobSearchForm = () => {
   };
 
   return (
-              <Paper elevation={3} style={{
-                padding: '20px',
-                maxWidth: '100%',
-                margin: 'auto',
-                background: 'transparent',
-                height: isMobile ? '100vh' : '80vh',
-                display: 'flex',
-                justifyContent: isMobile ? 'start' : 'center',
-                flexDirection: 'column',
-                alignItems: 'center'
-              }}>
+    <Paper elevation={3} style={{
+      padding: '20px',
+      maxWidth: '100%',
+      margin: 'auto',
+      background: 'transparent',
+      height: isMobile ? '100vh' : '80vh',
+      display: 'flex',
+      justifyContent: isMobile ? 'start' : 'center',
+      flexDirection: 'column',
+      alignItems: 'center'
+    }}>
       {renderStep()}
       <Box>
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-          <Button disabled={state === ""}
-            onClick={step < steps.length ? handleNext : handleSubmit}
-            sx={{
-              backgroundColor: '#19ff85',
-              color: 'black',
-              fontWeight: '900',
-              fontSize: '2.5rem',
-              padding: '5px 10px',
-              fontFamily:'sans-serif',
-              width: isMobile ? '80vw' : '20vw',
-              lineHeight:'1.2',
-              '&:hover': {
-                backgroundColor: 'black',
-                color: '#19ff85',
-                border: '1px solid #19ff85',
-              },
-            }}
-          >
-            {step < steps.length ? 'Next' : <Link to='/job-details'>show qualified opportunities</Link>}
-          </Button>
+          {step < steps.length ?
+            (
+              <Button disabled={state === ""}
+                onClick={step < steps.length ? handleNext : handleSubmit}
+                sx={{
+                  backgroundColor: '#19ff85',
+                  color: 'black',
+                  fontWeight: '900',
+                  fontSize: '2.5rem',
+                  padding: '5px 10px',
+                  fontFamily: 'sans-serif',
+                  width: isMobile ? '80vw' : '20vw',
+                  lineHeight: '1.2',
+                  '&:hover': {
+                    backgroundColor: 'black',
+                    color: '#19ff85',
+                    border: '1px solid #19ff85',
+                  },
+                }}
+              >
+                {step < steps.length ? 'Next' : <Link to='/job-details'>show qualified opportunities</Link>}
+              </Button>
+
+            ) :
+            (
+              <Link to='/job-details'>
+                            <Button
+              onClick={step < steps.length ? handleNext : handleSubmit}
+              sx={{
+                backgroundColor: '#19ff85',
+                color: 'black',
+                fontWeight: '900',
+                fontSize: '1.5rem',
+                padding: '5px 10px',
+                fontFamily: 'sans-serif',
+                width: isMobile ? '80vw' : '20vw',
+                lineHeight: '1.2',
+                '&:hover': {
+                  backgroundColor: 'black',
+                  color: '#19ff85',
+                  border: '1px solid #19ff85',
+                },
+              }}
+            >
+             show qualified opportunities
+            </Button>
+            </Link>
+
+            )
+
+
+          }
 
           {
             step != 1 &&
