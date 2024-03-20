@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { Button, Paper, Typography, Box } from '@mui/material';
-import stepsData from './steps.json'; // Import the JSON file directly
+import stepsData from '../components/steps.json'; // Import the JSON file directly
 import { useMediaQuery, useTheme } from '@mui/material'
 import { Link } from 'react-router-dom';
+import { useJobContext } from '../context/FormDataContext';
+import MainSectionWrapper from '../Wrapper/MainSectionWrapper';
 
 
 
@@ -21,17 +23,19 @@ interface FormData {
 }
 
 const JobSearchForm = () => {
+  const { jobFormData, setJobFormData } = useJobContext();
+
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('sm')); // Check if device is mobile or tablet
 
   const [step, setStep] = useState(1);
   const [state, setState] = useState('');
   const [formData, setFormData] = useState<FormData>({
-    state: '',
-    city: '',
-    practiceArea: '',
-    specialties: '',
-    jdYear: '',
+    state: jobFormData.state,
+    city: jobFormData.city,
+    practiceArea: jobFormData.practiceArea,
+    specialties: jobFormData.specialties,
+    jdYear: jobFormData.jdYear,
   });
   const [steps] = useState<Step[]>(stepsData.steps); // Use directly imported data
 
@@ -52,10 +56,15 @@ const JobSearchForm = () => {
   };
 
   const handleNext = () => {
+    
     if (state === "Remote" && step === 1) {
       setStep(step + 2); // Skip to the step after the city step
     } else {
       setStep(step + 1);
+    }
+    if (state === '') {
+      setStep(step); // Skip to the step after the city step
+      alert('Please Select One')
     }
   };
   const handlePrevious = () => {
@@ -68,6 +77,7 @@ const JobSearchForm = () => {
 
   const handleSubmit = () => {
     console.log(formData);
+    setJobFormData(formData)
     // Implement logic to show qualified opportunities
   };
 
@@ -165,8 +175,8 @@ const JobSearchForm = () => {
         <Box sx={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap' }}>
           {steps.map((stepItem, index) => (
             <Box key={index} style={{ padding: '20px 5px' }}>
-              <Typography variant="h2" style={{ color: step === index + 1 ? '#4caf50' : 'white', fontWeight: '500', fontSize: isMobile ? '10px' : '18px', letterSpacing: '3px', fontFamily: 'Times New Roman' }}>
-                {stepItem.label + '>'}
+              <Typography variant="h2" style={{ color: step === index + 1 ? '#4caf50' : 'white', fontWeight: 'bold', fontSize: isMobile ? '12px' : '14px', letterSpacing: '2px', }}>
+                {stepItem.label + ' >'}
               </Typography>
             </Box>
           ))}
@@ -188,12 +198,14 @@ const JobSearchForm = () => {
   };
 
   return (
+    <MainSectionWrapper>
+
+
     <Paper elevation={3} style={{
-      padding: '20px',
+      padding: isMobile ? '5px':'20px',
       maxWidth: '100%',
       margin: 'auto',
-      background: 'transparent',
-      height: isMobile ? '100vh' : '80vh',
+      background:'none',
       display: 'flex',
       justifyContent: isMobile ? 'start' : 'center',
       flexDirection: 'column',
@@ -204,8 +216,8 @@ const JobSearchForm = () => {
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
           {step < steps.length ?
             (
-              <Button disabled={state === ""}
-                onClick={step < steps.length ? handleNext : handleSubmit}
+              <Button 
+                onClick={handleNext}
                 sx={{
                   backgroundColor: '#19ff85',
                   color: 'black',
@@ -222,33 +234,33 @@ const JobSearchForm = () => {
                   },
                 }}
               >
-                {step < steps.length ? 'Next' : <Link to='/job-details'>show qualified opportunities</Link>}
+                Next
               </Button>
 
             ) :
             (
               <Link to='/job-details'>
-                            <Button
-              onClick={step < steps.length ? handleNext : handleSubmit}
-              sx={{
-                backgroundColor: '#19ff85',
-                color: 'black',
-                fontWeight: '900',
-                fontSize: '1.5rem',
-                padding: '5px 10px',
-                fontFamily: 'sans-serif',
-                width: isMobile ? '80vw' : '20vw',
-                lineHeight: '1.2',
-                '&:hover': {
-                  backgroundColor: 'black',
-                  color: '#19ff85',
-                  border: '1px solid #19ff85',
-                },
-              }}
-            >
-             show qualified opportunities
-            </Button>
-            </Link>
+                <Button
+                  onClick={handleSubmit}
+                  sx={{
+                    backgroundColor: '#19ff85',
+                    color: 'black',
+                    fontWeight: '900',
+                    fontSize: '1.5rem',
+                    padding: '5px 10px',
+                    fontFamily: 'sans-serif',
+                    width: isMobile ? '80vw' : '20vw',
+                    lineHeight: '1.2',
+                    '&:hover': {
+                      backgroundColor: 'black',
+                      color: '#19ff85',
+                      border: '1px solid #19ff85',
+                    },
+                  }}
+                >
+                  Show Results
+                </Button>
+              </Link>
 
             )
 
@@ -269,6 +281,9 @@ const JobSearchForm = () => {
         </Box>
       </Box>
     </Paper>
+    </MainSectionWrapper>
+
+
   );
 };
 

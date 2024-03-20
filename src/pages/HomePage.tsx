@@ -1,9 +1,12 @@
-import Joblisting from '../components/Joblisting'
+import Joblisting from '../components/Home'
+import MainSectionWrapper from '../Wrapper/MainSectionWrapper'
 
 export const HomePage = () => {
   return (
-    <>
-    <Joblisting></Joblisting>
-    </>
+    <MainSectionWrapper >
+      <Joblisting></Joblisting>
+    </MainSectionWrapper>
+
+
   )
 }

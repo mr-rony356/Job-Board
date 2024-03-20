@@ -9,7 +9,7 @@
         "New York",
         "Texas",
         "Illinois",
-        "Caliinnia",
+        "California",
         "Remote"
       ]
     },
@@ -19,14 +19,13 @@
       "options": {
         "Florida": [
           "Miami",
-          "int Lauderdale",
-          "Boca",
+          "Fort Lauderdale",
+          "Boca Raton",
           "West Palm Beach",
           "Tampa",
           "Orlando",
           "Tallahassee",
-          "Jacksonville",
-          "Other"
+          "Jacksonville"
         ],
         "D.C": [
           "D.C."
@@ -50,8 +49,8 @@
       }
     },
     {
-      "label": "Practice Area",
-      "question":"What Area are you looking in?",
+      "label": "Practice",
+      "question":"What Practice Area Do you work in?",
 
       "options": [
         "Corporate",
@@ -59,29 +58,10 @@
       ]
     },
     {
-      "label": "Cases",
-      "question":"What State are you looking in?",
+      "label": "Specialties",
+      "question":"What types of cases do you mostly work on  ?",
 
       "options": [
-        "2013"
-      ]
-    },
-    {
-      "label": "Size ",
-      "question":"What State are you looking in?",
-
-      "options": [
-        "2024",
-        "2023",
-        "2022",
-        "2021",
-        "2020",
-        "2019",
-        "2018",
-        "2017",
-        "2016",
-        "2015",
-        "2014",
         "2013"
       ]
     }

@@ -13,7 +13,6 @@
 }
 body, html {
   margin: 0;
-  background: linear-gradient(rgb(37 37 37), rgb(10 14 19 / 64%)), url(./assets/bg.jpg) 50% no-repeat;
   color: white;
   font-family: 'Times New Roman', Times, serif !important;
   background-repeat: no-repeat;
@@ -29,4 +28,18 @@ a:hover{
 .clicked {
   background: white !important;
   color: black !important;
+}
+.css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input:focus {
+  outline: green;
+  /* background: red; */
+  border: 1px solid green !important;
+}
+.MuiOutlinedInput-input {
+  padding: 5px 35px !important;
+}
+@media (max-width:600px) {
+  .MuiOutlinedInput-input {
+    padding: 5px 35px !important;
+  }
+  
 }

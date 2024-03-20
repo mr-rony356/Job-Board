@@ -9,8 +9,6 @@ const Joblisting: React.FC = () => {
   return (
     <Box
       sx={{
-        backgroundPosition: 'center',
-        backgroundSize: 'cover',
         padding: theme.spacing(4, 0),
         textAlign: 'center',
         color: 'white',
@@ -18,7 +16,6 @@ const Joblisting: React.FC = () => {
         overflowY: 'auto', // Add vertical scroll if content overflows
         display: 'flex',
         flexDirection: 'column',
-        marginTop: isMobile?'10px':'30px',
         justifyContent: isMobile ? 'flex-start' : 'center', // Space evenly between header, content, and footer
       }}
     >
@@ -32,7 +29,7 @@ const Joblisting: React.FC = () => {
           letterSpacing:'5px',
           fontWeight:'500'
         }}>
-          See Which Firms Are Hiring Attorneys Now?
+          See Which Firms Are Hiring Attorneys Now
         </Typography>
         <Typography variant="h5" sx={{
           fontSize: isMobile ? '.9rem' : '1.3rem', // Adjust font size for mobile
@@ -74,7 +71,7 @@ const Joblisting: React.FC = () => {
 
               '&:hover': {
                 backgroundColor: 'black',
-                color: '#4caf50',
+                color: '#19ff85',
               }
             }}
           >
@@ -83,12 +80,12 @@ const Joblisting: React.FC = () => {
         </Link>
         <Typography variant='h5'
           sx={{
-            fontSize: isMobile ? '.6rem' : '1rem',
-            marginBottom: theme.spacing(2),
-            fontFamily: 'Roboto',
-            color: theme.palette.primary.contrastText,
-            margin: isMobile ? '20px 0 50px 0' : '50px 0',
-            fontWeight: '300'
+            fontSize:isMobile?'12px':'14px',
+            textAlign:'center',
+            marginBottom:'20px',
+            fontFamily:'Roboto',
+            fontWeight:'300',
+             margin: isMobile ? '20px 0 50px 0' : '50px 0'
 
           }} >
           Hello, Chris Holtzhauer here, The Attorney Recruiter and President at Holtz & Bernard. I created this tool so you can see
