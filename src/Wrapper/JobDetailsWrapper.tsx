@@ -15,7 +15,7 @@ const JobDetailsWrapper: React.FC<MainSectionWrapperProps> = ({ children }) => {
       display:'flex',
       justifyContent:'space-between',
       alignItems:'center',
-      flexDirection:'column'
+      flexDirection:'column',
     }}>
       {children}
       <Footer />

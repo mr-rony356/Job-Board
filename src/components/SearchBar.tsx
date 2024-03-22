@@ -1,40 +1,35 @@
-import { useAutocomplete, AutocompleteGetTagProps } from '@mui/base/useAutocomplete';
+import { useAutocomplete } from '@mui/base/useAutocomplete';
 import CheckIcon from '@mui/icons-material/Check';
-import CloseIcon from '@mui/icons-material/Close';
 import { styled } from '@mui/material/styles';
 import { autocompleteClasses } from '@mui/material/Autocomplete';
+import SearchIcon from '@mui/icons-material/Search';
 
 const Root = styled('div')(
   ({ theme }) => `
   color: ${
-    theme.palette.mode === 'dark' ? '#19ff85' : 'rgba(0,0,0,.85)'
+    theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.65)' : 'rgba(0,0,0,.85)'
   };
   font-size: 14px;
 `,
 );
 
-const Label = styled('label')`
-  padding: 0 0 4px;
-  line-height: 1.5;
-  display: block;
-`;
 
 const InputWrapper = styled('div')(
   ({ theme }) => `
   width: 300px;
-  border: '#19ff85;
-  background-color:black;
+  border: 1px solid #1c663f;
+  background-color: #1c663f;
   border-radius: 4px;
   padding: 1px;
   display: flex;
   flex-wrap: wrap;
 
   &:hover {
-    border-color: ${theme.palette.mode === 'dark' ? '#177ddc' : '#40a9ff'};
+    border-color: ${theme.palette.mode === 'dark' ? '#177ddc' : '#1c663f'};
   }
 
   &.focused {
-    border-color: ${theme.palette.mode === 'dark' ? '#177ddc' : '#40a9ff'};
+    border-color: ${theme.palette.mode === 'dark' ? '#177ddc' : '#1c663f'};
     box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
   }
 
@@ -56,55 +51,8 @@ const InputWrapper = styled('div')(
 `,
 );
 
-interface TagProps extends ReturnType<AutocompleteGetTagProps> {
-  label: string;
-}
 
-function Tag(props: TagProps) {
-  const { label, onDelete, ...other } = props;
-  return (
-    <div {...other}>
-      <span>{label}</span>
-      <CloseIcon onClick={onDelete} />
-    </div>
-  );
-}
 
-const StyledTag = styled(Tag)<TagProps>(
-  ({ theme }) => `
-  display: flex;
-  align-items: center;
-  height: 24px;
-  margin: 2px;
-  line-height: 22px;
-  background-color: ${
-    theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.08)' : '#fafafa'
-  };
-  border: 1px solid ${theme.palette.mode === 'dark' ? '#303030' : '#e8e8e8'};
-  border-radius: 2px;
-  box-sizing: content-box;
-  padding: 0 4px 0 10px;
-  outline: 0;
-  overflow: hidden;
-
-  &:focus {
-    border-color: ${theme.palette.mode === 'dark' ? '#177ddc' : '#40a9ff'};
-    background-color: ${theme.palette.mode === 'dark' ? '#003b57' : '#e6f7ff'};
-  }
-
-  & span {
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-  }
-
-  & svg {
-    font-size: 12px;
-    cursor: pointer;
-    padding: 4px;
-  }
-`,
-);
 
 const Listbox = styled('ul')(
   ({ theme }) => `
@@ -156,13 +104,10 @@ const Listbox = styled('ul')(
 export default function CustomizedHook() {
   const {
     getRootProps,
-    getInputLabelProps,
     getInputProps,
-    getTagProps,
     getListboxProps,
     getOptionProps,
     groupedOptions,
-    value,
     focused,
     setAnchorEl,
   } = useAutocomplete({
@@ -170,25 +115,37 @@ export default function CustomizedHook() {
     defaultValue: [top100Films[1]],
     multiple: true,
     options: top100Films,
-    getOptionLabel: (option) => option.title,
+    getOptionLabel: (option) => option.PracticeArea,
   });
 
   return (
     <Root>
-      <div {...getRootProps()}>
-        <Label {...getInputLabelProps()}>Customized hook</Label>
+      <div {...getRootProps()} style={{position:'relative'}}>
         <InputWrapper ref={setAnchorEl} className={focused ? 'focused' : ''}>
-          {value.map((option: FilmOptionType, index: number) => (
-            <StyledTag label={option.title} {...getTagProps({ index })} />
-          ))}
-          <input {...getInputProps()} />
+                    <SearchIcon sx={{
+            paddingTop:'10px',
+            position:'absolute',
+            top:'-5px',
+            right:'10px',
+            color:'white'
+          }}></SearchIcon>
+
+          <span> 
+
+          </span>
+          <input {...getInputProps()} placeholder='Keyword Search' style={{
+            background:'black'
+          }}   />
+
+
+
         </InputWrapper>
       </div>
       {groupedOptions.length > 0 ? (
         <Listbox {...getListboxProps()}>
           {(groupedOptions as typeof top100Films).map((option, index) => (
             <li {...getOptionProps({ option, index })}>
-              <span>{option.title}</span>
+              <span>{option.City}</span>
               <CheckIcon fontSize="small" />
             </li>
           ))}
@@ -198,135 +155,140 @@ export default function CustomizedHook() {
   );
 }
 
-interface FilmOptionType {
-  title: string;
-  year: number;
-}
 
 // Top 100 films as rated by IMDb users. http://www.imdb.com/chart/top
 const top100Films = [
-  { title: 'The Shawshank Redemption', year: 1994 },
-  { title: 'The Godfather', year: 1972 },
-  { title: 'The Godfather: Part II', year: 1974 },
-  { title: 'The Dark Knight', year: 2008 },
-  { title: '12 Angry Men', year: 1957 },
-  { title: "Schindler's List", year: 1993 },
-  { title: 'Pulp Fiction', year: 1994 },
-  {
-    title: 'The Lord of the Rings: The Return of the King',
-    year: 2003,
-  },
-  { title: 'The Good, the Bad and the Ugly', year: 1966 },
-  { title: 'Fight Club', year: 1999 },
-  {
-    title: 'The Lord of the Rings: The Fellowship of the Ring',
-    year: 2001,
-  },
-  {
-    title: 'Star Wars: Episode V - The Empire Strikes Back',
-    year: 1980,
-  },
-  { title: 'Forrest Gump', year: 1994 },
-  { title: 'Inception', year: 2010 },
-  {
-    title: 'The Lord of the Rings: The Two Towers',
-    year: 2002,
-  },
-  { title: "One Flew Over the Cuckoo's Nest", year: 1975 },
-  { title: 'Goodfellas', year: 1990 },
-  { title: 'The Matrix', year: 1999 },
-  { title: 'Seven Samurai', year: 1954 },
-  {
-    title: 'Star Wars: Episode IV - A New Hope',
-    year: 1977,
-  },
-  { title: 'City of God', year: 2002 },
-  { title: 'Se7en', year: 1995 },
-  { title: 'The Silence of the Lambs', year: 1991 },
-  { title: "It's a Wonderful Life", year: 1946 },
-  { title: 'Life Is Beautiful', year: 1997 },
-  { title: 'The Usual Suspects', year: 1995 },
-  { title: 'Léon: The Professional', year: 1994 },
-  { title: 'Spirited Away', year: 2001 },
-  { title: 'Saving Private Ryan', year: 1998 },
-  { title: 'Once Upon a Time in the West', year: 1968 },
-  { title: 'American History X', year: 1998 },
-  { title: 'Interstellar', year: 2014 },
-  { title: 'Casablanca', year: 1942 },
-  { title: 'City Lights', year: 1931 },
-  { title: 'Psycho', year: 1960 },
-  { title: 'The Green Mile', year: 1999 },
-  { title: 'The Intouchables', year: 2011 },
-  { title: 'Modern Times', year: 1936 },
-  { title: 'Raiders of the Lost Ark', year: 1981 },
-  { title: 'Rear Window', year: 1954 },
-  { title: 'The Pianist', year: 2002 },
-  { title: 'The Departed', year: 2006 },
-  { title: 'Terminator 2: Judgment Day', year: 1991 },
-  { title: 'Back to the Future', year: 1985 },
-  { title: 'Whiplash', year: 2014 },
-  { title: 'Gladiator', year: 2000 },
-  { title: 'Memento', year: 2000 },
-  { title: 'The Prestige', year: 2006 },
-  { title: 'The Lion King', year: 1994 },
-  { title: 'Apocalypse Now', year: 1979 },
-  { title: 'Alien', year: 1979 },
-  { title: 'Sunset Boulevard', year: 1950 },
-  {
-    title: 'Dr. Strangelove or: How I Learned to Stop Worrying and Love the Bomb',
-    year: 1964,
-  },
-  { title: 'The Great Dictator', year: 1940 },
-  { title: 'Cinema Paradiso', year: 1988 },
-  { title: 'The Lives of Others', year: 2006 },
-  { title: 'Grave of the Fireflies', year: 1988 },
-  { title: 'Paths of Glory', year: 1957 },
-  { title: 'Django Unchained', year: 2012 },
-  { title: 'The Shining', year: 1980 },
-  { title: 'WALL·E', year: 2008 },
-  { title: 'American Beauty', year: 1999 },
-  { title: 'The Dark Knight Rises', year: 2012 },
-  { title: 'Princess Mononoke', year: 1997 },
-  { title: 'Aliens', year: 1986 },
-  { title: 'Oldboy', year: 2003 },
-  { title: 'Once Upon a Time in America', year: 1984 },
-  { title: 'Witness for the Prosecution', year: 1957 },
-  { title: 'Das Boot', year: 1981 },
-  { title: 'Citizen Kane', year: 1941 },
-  { title: 'North by Northwest', year: 1959 },
-  { title: 'Vertigo', year: 1958 },
-  {
-    title: 'Star Wars: Episode VI - Return of the Jedi',
-    year: 1983,
-  },
-  { title: 'Reservoir Dogs', year: 1992 },
-  { title: 'Braveheart', year: 1995 },
-  { title: 'M', year: 1931 },
-  { title: 'Requiem for a Dream', year: 2000 },
-  { title: 'Amélie', year: 2001 },
-  { title: 'A Clockwork Orange', year: 1971 },
-  { title: 'Like Stars on Earth', year: 2007 },
-  { title: 'Taxi Driver', year: 1976 },
-  { title: 'Lawrence of Arabia', year: 1962 },
-  { title: 'Double Indemnity', year: 1944 },
-  {
-    title: 'Eternal Sunshine of the Spotless Mind',
-    year: 2004,
-  },
-  { title: 'Amadeus', year: 1984 },
-  { title: 'To Kill a Mockingbird', year: 1962 },
-  { title: 'Toy Story 3', year: 2010 },
-  { title: 'Logan', year: 2017 },
-  { title: 'Full Metal Jacket', year: 1987 },
-  { title: 'Dangal', year: 2016 },
-  { title: 'The Sting', year: 1973 },
-  { title: '2001: A Space Odyssey', year: 1968 },
-  { title: "Singin' in the Rain", year: 1952 },
-  { title: 'Toy Story', year: 1995 },
-  { title: 'Bicycle Thieves', year: 1948 },
-  { title: 'The Kid', year: 1921 },
-  { title: 'Inglourious Basterds', year: 2009 },
-  { title: 'Snatch', year: 2000 },
-  { title: '3 Idiots', year: 2009 },
-  { title: 'Monty Python and the Holy Grail', year: 1975 },
-];
+    {
+      JobID: 123456,
+      "Firm ID": "",
+      "Firm": "Greenberg Traurig LLP",
+      City: "Miami",
+      State: "Florida",
+      "JobPracticeArea": "ASSOCIATE",
+      PracticeArea: "CORPORATE",
+      "Cases": "MERGERS & ACQUISITIONS, PRIVATE EQUITY, CORPORATE GOVERNANCE",
+      "JobPostPracticeArea": "CORPORATE M&A - ASSOCIATE (MID-LEVEL) - MIA",
+      "JobDescription": "Greenberg Traurig has an excellent opportunity for an M&A Associate to join the Corporate Practice of our Miami office. We offer competitive compensation and an excellent benefits package. The ideal candidate will have a minimum of four States of significant experience in corporate transactions with an emphasis on public and private M&A, including private equity. Candidates must have a strong working knowledge of acquisition agreements and the other documentation used in complex M&A and private equity transactions and proficiency in drafting the same. This position requires a candidate with strong interpersonal skills, a high degree of maturity, and a proven willingness to accept significant responsibility and manage a challenging workload within a fast-paced environment. Strong academic credentials and writing skills are essential. Additional requirements: Well-versed in the mechanics of leading an M&A transaction from inception to closing; experience leading due diligence teams; general corporate and corporate governance experience; ability to work effectively as part of a team across practice areas and a willingness to train junior associates. Candidates must be admitted to the Florida Bar or eligible for admission to the Florida Bar. For consideration, please submit your resume and official transcript(s). *Submissions from search firms will only be accepted through our web portal for third-party submissions; for access, contact Samira Jacobson. Greenberg Traurig is committed to having a diverse and inclusive workforce.  Individuals seeking employment at Greenberg Traurig are considered without regards to race, color, religion, sex, sexual orientation, gender identification, national origin, age, marital status, ancestry, physical or mental disability, veteran status, or genetic information, among other protected bases. To that end, GT, a Mansfield Rule 4.0 Certified firm, continues with its current participation in Diversity Lab’s Mansfield Rule 5.0 initiative, which measures and seeks to increase diversity within law firms. Providing your data during the application process helps us with achieving that goal and with meeting reporting/record-keeping obligations under federal and state law and other legal requirements. Providing your data is entirely voluntary and will not be considered in the hiring process or thereafter. Any information that you do provide will be treated confidentially.",
+      "Minimum JD State": 2020,
+      "Maximum JD State": "",
+      "Min Salary": 205000,
+      "Max Salary": 305000,
+      "Contact Info": "",
+      "Date Updated": "2024-02-03T00:37:55.000Z",
+      "Firm Size": ""
+    },
+    {
+      JobID: 638290,
+      "Firm ID": "",
+      "Firm": "Greenberg Traurig LLP",
+      City: "Miami",
+      State: "Florida",
+      "JobPracticeArea": "ASSOCIATE",
+      PracticeArea: "LITIGATION",
+      "Cases": "ARBITRATION, INTERNATIONAL",
+      "JobPostPracticeArea": "COMMERCIAL LITIGATION TRIAL ASSOCIATE (JUNIOR TO MID-LEVEL) - MIAMI",
+      "JobDescription": "Greenberg Traurig has an exciting opportunity for two junior to mid level Associates to join the Trial and Litigation Practice of our Miami office. We offer highly competitive compensation and an excellent benefits package. Job Requirements The ideal candidate will have a minimum of three States of experience in commercial litigation and/or arbitration, including experience with trials and/or final hearings. Excellent academic credentials and strong research, writing, oral advocacy, and discovery skills are essential. Ideal candidates will be self-starters inclined toward sophisticated casework and creative strategies. Candidates should have been ranked in the top of their law school class or have graduated from a top-tier law school. Federal clerkship experience and an interest in international disputes are a plus, but not required. Fluency in Spanish preferred. Florida Bar preferred. For consideration, please submit a resume, official transcript(s), and one or two writing samples all in PDF format. *Submissions from search firms will only be accepted through our web portal for third party submissions; for access, contact Samira Jacobson. Greenberg Traurig is committed to diversity and inclusion in the workplace. Individuals seeking employment at Greenberg Traurig are considered without regards to race, color, religion, sex, sexual orientation, gender identification, national origin, age, marital status, ancestry, disability, veteran status, or genetic information, among other protected bases. In support of our unwavering dedication to putting diversity, equity, and inclusion into action, GT participates in the Mansfield Rule Certification Program. This Program, which is administered by The Diversity Lab, aims to increase diverse representation in the legal industry. In July 2020, we achieved Mansfield Rule 3.0 Certification. A State later, in 2021, we achieved Mansfield 4.0 Certification Plus, meaning we went beyond the requirements of the original Mansfield program. Most recently, in 2022, GT gained Mansfield Rule 5.0 Certification Plus – again achieving the highest level of certification a law firm can obtain. GT is currently participating in the Mansfield Rule 6.0 Certification Program. Providing your data during the application process helps us with achieving our goals and with meeting reporting/record-keeping obligations under federal and state law and other legal requirements. Providing your data is entirely voluntary and will not be considered in the hiring process or thereafter. Any information that you do provide will be treated confidentially.",
+      "Minimum JD State": 2021,
+      "Maximum JD State": 2017,
+      "Min Salary": "",
+      "Max Salary": "",
+      "Contact Info": "",
+      "Date Updated": "2022-07-12T01:52:23.000Z",
+      "Firm Size": ""
+    },
+    {
+      JobID: 433055,
+      "Firm ID": "",
+      "Firm": "Greenberg Traurig LLP",
+      City: "Miami",
+      State: "Florida",
+      "JobPracticeArea": "ASSOCIATE",
+      PracticeArea: "CORPORATE",
+      "Cases": "MERGERS & ACQUISITIONS, CAPITAL MARKETS, CORPORATE GOVERNANCE",
+      "JobPostPracticeArea": "CORPORATE CAPITAL MARKETS - ASSOCIATE (MID-LEVEL) - MIA",
+      "JobDescription": "Greenberg Traurig has an excellent opportunity for a Capital Markets associate. We offer competitive compensation and an excellent benefits package. Practice Summary Greenberg Traurig’s global Capital Markets Practice is recognized for its skill in handling U.S. and cross-border transactions, including initial public offerings, high yield, and investment-grade debt offerings, Rule 144A and Regulation S offerings for foreign private issuers, registered direct offerings, at-the-market offerings (ATMs), public and private equity line transactions, Special Purpose Acquisition Companies (SPACs), Real Estate Investment Trusts (REITs), and Private Investment in Public Entities (PIPEs). We represent U.S. and non-U.S. public and private issuers, as well as underwriters, financial institutions, venture capital funds, hedge funds, broker-dealers, investment companies, and private investment firms in all aspects of U.S. and cross-border securities offerings. Job Requirements The ideal candidate will have 2-6 States of significant experience in corporate transactions, with an emphasis on Capital Markets.  This position requires a candidate with strong interpersonal skills, a high degree of maturity, and a proven willingness to accept significant responsibility and manage a challenging workload within a fast-paced environment. Strong academic credentials and writing skills are essential. Additional requirements: Well-versed in the mechanics of leading Capital Market transactions; experience leading due diligence teams; general corporate and corporate governance experience; ability to work effectively as part of a team across practice areas and a willingness to train junior associates. Candidates must be admitted to the Florida Bar or eligible for admission to the Florida Bar. Submit a brief cover letter, resume, official JD transcript, and deal sheet, all in PDF format. Submissions from search firms will only be accepted through our web portal for third-party submissions; for access, contact Samira Jacobson. Greenberg Traurig is committed to diversity and inclusion in the workplace. Individuals seeking employment at Greenberg Traurig are considered without regards to race, color, religion, sex, sexual orientation, gender identification, national origin, age, marital status, ancestry, disability, veteran status, or genetic information, among other protected bases. In support of our commitment to a diverse and inclusive workplace, GT participates in the Mansfield Rule Certification Program. The program, which is administered by The Diversity Lab, seeks to increase diversity representation in the legal profession and within law firm leadership roles. In 2019, GT achieved Mansfield 3.0 Certification, and in 2020, we achieved an even higher standard: Mansfield 4.0 Certification Plus. GT is currently participating in the Mansfield Rule 5.0 Certification Program. Providing your data during the application process helps us with achieving that goal and with meeting reporting/record-keeping obligations under federal and state law and other legal requirements. Providing your data is entirely voluntary and will not be considered in the hiring process or thereafter. Any information that you do provide will be treated confidentially.",
+      "Minimum JD State": 2020,
+      "Maximum JD State": 2018,
+      "Min Salary": "",
+      "Max Salary": "",
+      "Contact Info": "",
+      "Date Updated": "2021-12-01T01:21:05.000Z",
+      "Firm Size": ""
+    },
+    {
+      JobID: 456825,
+      "Firm ID": "",
+      "Firm": "Greenberg Traurig LLP",
+      City: "Tampa",
+      State: "Florida",
+      "JobPracticeArea": "ASSOCIATE",
+      PracticeArea: "CORPORATE",
+      "Cases": "MERGERS & ACQUISITIONS",
+      "JobPostPracticeArea": "CORPORATE MID-LEVEL ASSOCIATE - TPA",
+      "JobDescription": "The Tampa office has a current opening for a mid-level corporate associate with a minimum of 3 States of experience.  This is a rare opportunity to join an excellent corporate practice at a major international law firm while enjoying the quality of life that working in a smaller office (≈ 25 lawyers) and living in the Tampa Bay Area provides.  Tampa Bay, home of both the Stanley Cup Champion Lightning and the Superbowl Champion Buccaneers, has been named the No. 1 city in Florida and No. 22 nationally in a recent annual ranking of best cities.  The Legal 500 2021 U.S. Guide lists 15 GT Tampa practice areas and recognizes seven attorneys, including a “Leading Lawyer,” one of only four nationally in his practice area.  Candidates must have strong academic records, demonstrate excellent communication skills, be willing to assume significant responsibilities, and have the desire and ability to work in a fast-paced environment. General corporate experience is essential.  We prefer candidates who have experience with technology companies and a strong transactional background. All candidates must be members of The Florida Bar or qualified for membership and willing to take the February 2022 bar examination.  Interested candidates should submit their resume and J.D. transcript online through the GT website.  Transcripts do not need to be official copies To that end, GT, a Mansfield Rule 3.0 Certified firm, continues with its current participation in Diversity Lab’s Mansfield Rule 4.0 initiative, which measures and seeks to increase diversity within law firms. Providing your data during the application process helps us with achieving that goal and with meeting reporting/record-keeping obligations under federal and state law and other legal requirements. Providing your data is entirely voluntary and will not be considered in the hiring process or thereafter. Any information that you do provide will be treated confidentially. #LI-Onsite",
+      "Minimum JD State": 2021,
+      "Maximum JD State": 2018,
+      "Min Salary": "",
+      "Max Salary": "",
+      "Contact Info": "",
+      "Date Updated": "2022-10-20T02:36:32.000Z",
+      "Firm Size": ""
+    },
+    {
+      JobID: 481501,
+      "Firm ID": "",
+      "Firm": "Greenberg Traurig LLP",
+      City: "Orlando",
+      State: "Florida",
+      "JobPracticeArea": "ASSOCIATE",
+      PracticeArea: "CORPORATE",
+      "Cases": "PUBLIC FINANCE, FINANCE, SECURITIES",
+      "JobPostPracticeArea": "PUBLIC FINANCE - MID-LEVEL ASSOCIATE",
+      "JobDescription": "The Orlando office is looking for a Public Finance Associate with three to five States of experience.  Ideal candidates should have experience in municipal finance, tax and securities law and have worked with governments as well as underwriters and banks on municipal finance transactions or equivalent experience.  Candidates should possess excellent academic credentials, strong oral and written communication skills, meaningful professional experience, and the ability and desire to assume significant responsibility in a fast paced environment.  Interested candidates should submit their resume, cover letter and J.D. transcript online through the GT website. Transcripts do not need to be official copies.  Greenberg Traurig is committed to diversity and inclusion in the workplace. Individuals seeking employment at Greenberg Traurig are considered without regards to race, color, religion, sex, sexual orientation, gender identification, national origin, age, marital status, ancestry, physical or mental disability, veteran status, or genetic information, among other protected bases. To that end, GT, a Mansfield Rule 3.0 Certified firm, continues with its current participation in Diversity Lab’s Mansfield Rule 4.0 initiative, which measures and seeks to increase diversity within law firms. Providing your data during the application process helps us with achieving that goal and with meeting reporting/record-keeping obligations under federal and state law and other legal requirements. Providing your data is entirely voluntary and will not be considered in the hiring process or thereafter. Any information that you do provide will be treated confidentially. #LI-Onsite",
+      "Minimum JD State": 2020,
+      "Maximum JD State": "",
+      "Min Salary": "",
+      "Max Salary": "",
+      "Contact Info": "",
+      "Date Updated": "2023-01-04T19:36:37.000Z",
+      "Firm Size": ""
+    },
+    {
+      JobID: 173713,
+      "Firm ID": "",
+      "Firm": "Greenberg Traurig LLP",
+      City: "Fort Lauderdale",
+      State: "Florida",
+      "JobPracticeArea": "ASSOCIATE",
+      PracticeArea: "CORPORATE",
+      "Cases": "MERGERS & ACQUISITIONS, PRIVATE EQUITY",
+      "JobPostPracticeArea": "ASSOCIATE - MID-LEVEL CORPORATE M&A",
+      "JobDescription": "The Fort Lauderdale office Corporate Group is seeking a mid-level associate with a minimum of three (3) States of experience in M&A.  The Fort Lauderdale Corporate Group is a nationally recognized practice with clients all over the United States as well as internationally.  The work is sophisticated, and associates are exposed to client interaction as well as given responsibilities early on.  Candidates should have solid hands-on M&A experience with private equity experience a plus.  In addition, candidates should possess strong academics, excellent communication skills, willing to take the lead, and willing to work the hours of a high paced busy practice.  Interested candidates should submit their resume and J.D. transcript online through the GT website.  Transcripts do not need to be official copies. Greenberg Traurig is committed to diversity and inclusion in the workplace. Individuals seeking employment at Greenberg Traurig are considered without regards to race, color, religion, sex, sexual orientation, gender identification, national origin, age, marital status, ancestry, disability, veteran status, or genetic information, among other protected bases. In support of our unwavering dedication to putting diversity, equity, and inclusion into action, GT participates in the Mansfield Rule Certification Program. This Program, which is administered by The Diversity Lab, aims to increase diverse representation in the legal industry. In July 2020, we achieved Mansfield Rule 3.0 Certification. A State later, in 2021, we achieved Mansfield 4.0 Certification Plus, meaning we went beyond the requirements of the original Mansfield program. Most recently, in 2022, GT gained Mansfield Rule 5.0 Certification Plus – again achieving the highest level of certification a law firm can obtain. GT is currently participating in the Mansfield Rule 6.0 Certification Program. Providing your data during the application process helps us with achieving our goals and with meeting reporting/record-keeping obligations under federal and state law and other legal requirements. Providing your data is entirely voluntary and will not be considered in the hiring process or thereafter. Any information that you do provide will be treated confidentially. #LI-Onsite",
+      "Minimum JD State": 2021,
+      "Maximum JD State": 2017,
+      "Min Salary": "",
+      "Max Salary": "",
+      "Contact Info": "",
+      "Date Updated": "2022-04-20T00:24:24.000Z",
+      "Firm Size": ""
+    },
+    {
+      JobID: 295213,
+      "Firm ID": "",
+      "Firm": "Greenberg Traurig LLP",
+      City: "Fort Lauderdale",
+      State: "Florida",
+      "JobPracticeArea": "ASSOCIATE",
+      PracticeArea: "INSURANCE",
+      "Cases": "TRANSACTIONAL, REGULATORY",
+      "JobPostPracticeArea": "ASSOCIATE - SENIOR INSURANCE REGULATORY",
+      "JobDescription": "The Fort Lauderdale Insurance Regulatory and Transactions Practice Group is looking for a mid-level to senior associate.  Preferred candidates should have a transactional background, experience in the insurance regulatory environment and a background/interest in sophisticated legal, regulatory and transactional matters.  In addition, candidates should possess strong academics.  Interested candidates should submit their resume and J.D. transcript online through our website.  Transcripts do not need to be official copies. Greenberg Traurig is committed to having a diverse and inclusive workforce.  Individuals seeking employment at Greenberg Traurig are considered without regards to race, color, religion, sex, sexual orientation, gender identification, national origin, age, marital status, ancestry, physical or mental disability, veteran status, or genetic information, among other protected bases. To that end, GT is voluntarily participating in Diversity Lab’s Mansfield Rule 3.0 initiative, which measures and seeks to increase diversity within law firms.  Providing your data during the application process helps us with achieving that goal and with meeting reporting/recordkeeping obligations under federal and state law and other legal requirements.  Providing your data is entirely voluntary and will not be considered in the hiring process or thereafter.  Any information that you do provide will be treated confidentially. #LI-Onsite",
+      "Minimum JD State": 2021,
+      "Maximum JD State": "",
+      "Min Salary": "",
+      "Max Salary": "",
+      "Contact Info": "",
+      "Date Updated": "2023-09-28T21:38:46.000Z",
+      "Firm Size": ""
+    }
+  ]

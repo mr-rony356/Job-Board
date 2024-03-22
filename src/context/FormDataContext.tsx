@@ -3,9 +3,8 @@ import React, { createContext, useState, useContext } from 'react';
 interface FormData {
   state: string;
   city: string;
-  practiceArea: string;
-  specialties: string;
-  jdYear: string;
+  practiceArea: string[];
+  specialties: string[];
   clicked?: string;
 }
 
@@ -20,11 +19,9 @@ export const JobProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [jobFormData, setJobFormData] = useState<FormData>({
     state: '',
     city: '',
-    practiceArea: '',
-    specialties: '',
-    jdYear: '',
+    practiceArea: [],
+    specialties: [],
   });
-
   return (
     <JobContext.Provider value={{ jobFormData, setJobFormData }}>
       {children}

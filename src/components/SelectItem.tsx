@@ -10,7 +10,6 @@ interface SelectLabelsProps {
 
 export default function SelectLabels({ values, initialValue }: SelectLabelsProps) {
   const [age, setAge] = React.useState(initialValue);
-  console.log(initialValue)
 
   const handleChange = (event: SelectChangeEvent) => {
     setAge(event.target.value as string);
@@ -38,7 +37,7 @@ export default function SelectLabels({ values, initialValue }: SelectLabelsProps
         size='small'
       >
         <Select
-           value={age}
+          value={age}
           onChange={handleChange}
           inputProps={{ 'aria-label': 'Without label' }}
           sx={{ 

@@ -1,83 +1,85 @@
 import { useState } from 'react';
 import { Button, Paper, Typography, Box } from '@mui/material';
-import stepsData from '../components/steps.json'; // Import the JSON file directly
-import { useMediaQuery, useTheme } from '@mui/material'
+import stepsData from '../components/steps.json';
+import { useMediaQuery, useTheme } from '@mui/material';
 import { Link } from 'react-router-dom';
-import { useJobContext } from '../context/FormDataContext';
 import MainSectionWrapper from '../Wrapper/MainSectionWrapper';
-
-
-
+import { useJobContext } from '../context/FormDataContext';
+type FormDataKeys = keyof FormData;
 interface Step {
   label: string;
+  name: string;
   question: string;
   options: string[] | { [key: string]: string[] };
 }
+
 interface FormData {
   state: string;
   city: string;
-  practiceArea: string;
-  specialties: string;
-  jdYear: string;
-  clicked?: string; // Define clicked property as optional
+  practiceArea: string[];
+  specialties: string[];
+  clicked?: string;
 }
 
 const JobSearchForm = () => {
-  const { jobFormData, setJobFormData } = useJobContext();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-  const theme = useTheme()
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm')); // Check if device is mobile or tablet
+  const { jobFormData, setJobFormData } = useJobContext();
 
   const [step, setStep] = useState(1);
   const [state, setState] = useState('');
   const [formData, setFormData] = useState<FormData>({
     state: jobFormData.state,
     city: jobFormData.city,
-    practiceArea: jobFormData.practiceArea,
-    specialties: jobFormData.specialties,
-    jdYear: jobFormData.jdYear,
+    practiceArea: [],
+    specialties: [],
   });
-  const [steps] = useState<Step[]>(stepsData.steps); // Use directly imported data
+  const [steps] = useState<Step[]>(stepsData.steps);
 
   const handleChange = (field: string, value: string) => {
-    setFormData({
-      ...formData,
-      [field]: value,
-      clicked: value, // Add the clicked value to the state
-    });
-    if (
-      step === 1
-    ) {
-      setState({ [field]: value }.state);
+    let updatedValue: string[] = [];
 
+    if (field === 'practiceArea' || field === 'specialties') {
+      updatedValue = formData[field].includes(value)
+        ? formData[field].filter((option) => option !== value)
+        : [...formData[field], value];
+    } else {
+      updatedValue = [value];
     }
 
-    console.log({ [field]: value }.state)
+    setFormData({
+      ...formData,
+      [field]: updatedValue
+    });
+
+    if (step === 1) {
+      setState(updatedValue.length > 0 ? updatedValue[0] : '');
+    }
   };
 
   const handleNext = () => {
-    
-    if (state === "Remote" && step === 1) {
-      setStep(step + 2); // Skip to the step after the city step
+    if (state === 'Remote' && step === 1) {
+      setStep(step + 2);
     } else {
       setStep(step + 1);
     }
+
     if (state === '') {
-      setStep(step); // Skip to the step after the city step
-      alert('Please Select One')
+      setStep(step);
+      alert('Please Select One');
     }
   };
+
   const handlePrevious = () => {
-    if (state === "Remote" && step === 3) {
-      setStep(step - 2); // Skip to the step after the city step
+    if (state === 'Remote' && step === 3) {
+      setStep(step - 2);
     } else {
       setStep(step - 1);
     }
   };
-
   const handleSubmit = () => {
-    console.log(formData);
-    setJobFormData(formData)
+    setJobFormData(formData);
     // Implement logic to show qualified opportunities
   };
 
@@ -86,14 +88,7 @@ const JobSearchForm = () => {
 
     return (
       <Box>
-        <Typography variant="h2" style={{
-          color: 'white',
-          marginBottom: '50px',
-          fontFamily: 'inherit',
-          textAlign: 'center',
-          fontSize: isMobile ? '2.2rem' : '3rem',
-          letterSpacing: '5px'
-        }}>
+        <Typography variant="h2" style={{ color: 'white', marginBottom: '50px', fontFamily: 'inherit', textAlign: 'center', fontSize: isMobile ? '2.2rem' : '3rem', letterSpacing: '5px' }}>
           {question}
         </Typography>
         <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
@@ -101,64 +96,30 @@ const JobSearchForm = () => {
             ? options.map((option) => (
               <Button
                 key={option}
-                onClick={() => handleChange(stepItem.label.toLowerCase(), option)}
+                onClick={() => handleChange(stepItem.name, option)}
                 variant="outlined"
-                className={formData.clicked === option ? 'clicked' : ''}
-                style={{
-                  color: 'white',
-                  borderColor: 'white',
-                  borderWidth: '2px',
-                  margin: '5px',
-                  cursor: 'pointer',
-                  fontWeight: '500',
-                  borderRadius: '0px',
-                  fontSize: isMobile ? '16px ' : '18px',
-                  fontFamily: "inherit",
-                  padding: '0 15px',
-                  textTransform: 'capitalize',
-                  letterSpacing: '3px'
-                }}
-              >
-                {option}
+                className={formData[stepItem.name as FormDataKeys]?.includes(option) ? 'clicked' : ''}
+                style={{ color: 'white', borderColor: 'white', borderWidth: '2px', margin: '5px', cursor: 'pointer', fontWeight: '500', borderRadius: '0px', fontSize: isMobile ? '16px' : '18px', fontFamily: 'inherit', padding: '0 15px', textTransform: 'capitalize', letterSpacing: '3px' }}>
+                {option.toLocaleLowerCase()}
               </Button>
             ))
             : Object.entries(options).map(([key, value]) => {
-
               if (key === state) {
                 return (
-
                   <Box key={key} sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
                     {value.map((option) => (
                       <Button
                         key={option}
-                        onClick={() => handleChange(stepItem.label.toLowerCase(), option)}
+                        onClick={() => handleChange(stepItem.name, option)}
                         variant="outlined"
-                        className={formData.clicked === option ? 'clicked' : ''}
-
-                        style={{
-                          color: 'white',
-                          borderColor: 'white',
-                          borderWidth: '2px',
-                          margin: '5px',
-                          cursor: 'pointer',
-                          fontWeight: '500',
-                          borderRadius: '0px',
-                          fontSize: isMobile ? '16px ' : '18px',
-                          fontFamily: "inherit",
-                          padding: '0 15px',
-                          textTransform: 'capitalize',
-                          letterSpacing: '3px'
-
-
-                        }}
-                      >
+                        className={formData[stepItem.name as FormDataKeys]?.includes(option) ? 'clicked' : ''}
+                        style={{ color: 'white', borderColor: 'white', borderWidth: '2px', margin: '5px', cursor: 'pointer', fontWeight: '500', borderRadius: '0px', fontSize: isMobile ? '16px' : '18px', fontFamily: 'inherit', padding: '0 15px', textTransform: 'capitalize', letterSpacing: '3px' }}>
                         {option}
                       </Button>
                     ))}
                   </Box>
-                )
+                );
               }
-
             })}
         </Box>
       </Box>
@@ -175,78 +136,48 @@ const JobSearchForm = () => {
         <Box sx={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap' }}>
           {steps.map((stepItem, index) => (
             <Box key={index} style={{ padding: '20px 5px' }}>
-              <Typography variant="h2" style={{ color: step === index + 1 ? '#4caf50' : 'white', fontWeight: 'bold', fontSize: isMobile ? '12px' : '14px', letterSpacing: '2px', }}>
+              <Typography variant="h2" style={{ color: step === index + 1 ? '#4caf50' : 'white', fontWeight: 'bold', fontSize: isMobile ? '12px' : '14px', letterSpacing: '2px' }}>
                 {stepItem.label + ' >'}
               </Typography>
             </Box>
           ))}
         </Box>
-        {/* Render steps */}
         <Box sx={{ display: 'flex', width: '100%', justifyContent: 'center', color: 'white' }}>
           {steps.map((stepItem, index) => (
             <Box key={index} style={{ padding: isMobile ? '20px 0px' : '20px 5px' }}>
-              {step === index + 1 && (
-                <Box sx={{ color: 'white' }}>
-                  {renderOptions(stepItem)}
-                </Box>
-              )}
+              {step === index + 1 && <Box sx={{ color: 'white' }}>{renderOptions(stepItem)}</Box>}
             </Box>
           ))}
         </Box>
       </Box>
     );
-  };
-
+  }
   return (
     <MainSectionWrapper>
 
 
-    <Paper elevation={3} style={{
-      padding: isMobile ? '5px':'20px',
-      maxWidth: '100%',
-      margin: 'auto',
-      background:'none',
-      display: 'flex',
-      justifyContent: isMobile ? 'start' : 'center',
-      flexDirection: 'column',
-      alignItems: 'center'
-    }}>
-      {renderStep()}
-      <Box>
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-          {step < steps.length ?
-            (
-              <Button 
-                onClick={handleNext}
-                sx={{
-                  backgroundColor: '#19ff85',
-                  color: 'black',
-                  fontWeight: '900',
-                  fontSize: '2.5rem',
-                  padding: '5px 10px',
-                  fontFamily: 'sans-serif',
-                  width: isMobile ? '80vw' : '20vw',
-                  lineHeight: '1.2',
-                  '&:hover': {
-                    backgroundColor: 'black',
-                    color: '#19ff85',
-                    border: '1px solid #19ff85',
-                  },
-                }}
-              >
-                Next
-              </Button>
-
-            ) :
-            (
-              <Link to='/job-details'>
+      <Paper elevation={3} style={{
+        padding: isMobile ? '5px' : '20px',
+        maxWidth: '100%',
+        margin: 'auto',
+        background: 'none',
+        display: 'flex',
+        justifyContent: isMobile ? 'start' : 'center',
+        flexDirection: 'column',
+        alignItems: 'center'
+      }}>
+        {renderStep()}
+        <Box>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+            {step < steps.length ?
+              (
                 <Button
-                  onClick={handleSubmit}
+                  onClick={handleNext}
                   sx={{
                     backgroundColor: '#19ff85',
                     color: 'black',
                     fontWeight: '900',
-                    fontSize: '1.5rem',
+                    fontSize: '2.5rem',
                     padding: '5px 10px',
                     fontFamily: 'sans-serif',
                     width: isMobile ? '80vw' : '20vw',
@@ -258,29 +189,53 @@ const JobSearchForm = () => {
                     },
                   }}
                 >
-                  Show Results
+                  Next
                 </Button>
-              </Link>
 
-            )
+              ) :
+              (
+                <Link to='/job-details'>
+                  <Button
+                    onClick={handleSubmit}
+                    sx={{
+                      backgroundColor: '#19ff85',
+                      color: 'black',
+                      fontWeight: '900',
+                      fontSize: '1.5rem',
+                      padding: '5px 10px',
+                      fontFamily: 'sans-serif',
+                      width: isMobile ? '80vw' : '20vw',
+                      lineHeight: '1.2',
+                      '&:hover': {
+                        backgroundColor: 'black',
+                        color: '#19ff85',
+                        border: '1px solid #19ff85',
+                      },
+                    }}
+                  >
+                    Show Results
+                  </Button>
+                </Link>
+
+              )
 
 
-          }
+            }
 
-          {
-            step != 1 &&
-            <Button disabled={step === 1} onClick={handlePrevious} sx={{
-              fontSize: '12px', color: '#19ff85', fontWeight: 'bold', padding: '10px', '&:hover': {
-                border: '1px solid #19ff85 '
-              }
-            }}>
-              Go Back
-            </Button>
-          }
+            {
+              step != 1 &&
+              <Button disabled={step === 1} onClick={handlePrevious} sx={{
+                fontSize: '12px', color: '#19ff85', fontWeight: 'bold', padding: '10px', '&:hover': {
+                  border: '1px solid #19ff85 '
+                }
+              }}>
+                Go Back
+              </Button>
+            }
 
+          </Box>
         </Box>
-      </Box>
-    </Paper>
+      </Paper>
     </MainSectionWrapper>
 
 

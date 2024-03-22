@@ -2,6 +2,7 @@
   "steps": [
     {
       "label": "State",
+      "name": "state",
       "question":"What State are you looking in?",
       "options": [
         "Florida",
@@ -15,6 +16,7 @@
     },
     {
       "label": "City",
+      "name": "city",
       "question":"What City are you looking in?",
       "options": {
         "Florida": [
@@ -49,20 +51,35 @@
       }
     },
     {
-      "label": "Practice",
+      "label": "Practice Area",
+      "name": "practiceArea",
       "question":"What Practice Area Do you work in?",
 
       "options": [
         "Corporate",
-        "Litigation"
+        "Litigation",
+        "INSURANCE"
       ]
     },
     {
       "label": "Specialties",
+      "name": "specialties",
       "question":"What types of cases do you mostly work on  ?",
 
       "options": [
-        "2013"
+        "MERGERS ",
+        "ACQUISITIONS",
+        "PRIVATE EQUITY",
+        "CORPORATE GOVERNANCE",
+        "CAPITAL MARKETS",
+        "MERGERS & ACQUISITIONS",
+        "PUBLIC FINANCE",
+        "FINANCE",
+        "SECURITIES",
+        "ARBITRATION",
+        "TRANSACTIONAL",
+        "REGULATORY",
+        "INTERNATIONAL"
       ]
     }
   ]

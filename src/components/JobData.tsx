@@ -39,7 +39,7 @@ const JobDetails: React.FC<JobDetailsProps> = ({ jobId }) => {
         <Typography variant="h5">Firm: {jobDetails.Firm}</Typography>
         <Typography variant="body1">Job Description: {jobDetails.JobPostDescription}</Typography>
         <Typography variant="body1">Location: {jobDetails.City}, {jobDetails.State}</Typography>
-        <Typography variant="body1">Practice Area: {jobDetails.PracticeArea}</Typography>
+        <Typography variant="body1">Practice Area: {jobDetails.practiceArea}</Typography>
         {/* Render other fields as needed */}
       </Box>
   );
