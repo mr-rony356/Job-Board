@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 import Dialog from '@mui/material/Dialog';
@@ -7,10 +7,11 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
-import { Typography, Box, Chip } from '@mui/material';
+import { Typography, Box, Chip, useTheme, useMediaQuery } from '@mui/material';
 import stepsData from '../components/steps.json';
 import { useJobContext } from '../context/FormDataContext';
 import { produce } from 'immer';
+
 type FormDataKeys = keyof FormData;
 
 interface Step {
@@ -21,8 +22,8 @@ interface Step {
 }
 
 interface FormData {
-  state: string;
-  city: string;
+  State: string;
+  City: string;
   practiceArea: string[];
   specialties: string[];
 }
@@ -30,6 +31,7 @@ interface FormData {
 interface CustomizedDialogsProps {
   open: boolean;
   handleClose: () => void;
+  initialSpecialties?: string[]; // Optional prop to receive specialties from parent
 }
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -41,31 +43,31 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   },
 }));
 
-const CustomizedDialogs: React.FC<CustomizedDialogsProps> = ({ open, handleClose }) => {
-  // const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+const CustomizedDialogs: React.FC<CustomizedDialogsProps> = ({
+  open,
+  handleClose,
+  initialSpecialties,
+}) => {
+  console.log(initialSpecialties)
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const { jobFormData, setJobFormData } = useJobContext();
-  const [specialties, setSpecialties] = useState<string[]>(jobFormData.specialties);
-  const [formData, setFormData] = useState<FormData>({
-    state: jobFormData.state,
-    city: jobFormData.city,
-    practiceArea: jobFormData['practiceArea'],
-    specialties: jobFormData['specialties'],
-  });
-
+  const [specialties, setSpecialties] = useState<string[]>(
+    initialSpecialties || jobFormData.specialties // Use initialSpecialties if provided, otherwise default to jobFormData.specialties
+  );
+  const initialSpecialtiesRef = useRef(initialSpecialties); // Store initialSpecialties to prevent unnecessary re-renders
   const [steps] = useState<Step[]>(stepsData.steps);
-
   useEffect(() => {
-    console.log('calleddddddddddddddd', );
-    setJobFormData({
-      ...formData,
-      specialties: specialties,
-    });
-  }, [specialties]);
+    if (initialSpecialtiesRef.current !== initialSpecialties) {
+      // Update specialties only if initialSpecialties changes
+      setSpecialties(initialSpecialties || []);
+      initialSpecialtiesRef.current = initialSpecialties;
+    }
+
+  }, [initialSpecialties]);
 
   const handleChange = (field: keyof FormData, value: string) => {
-    console.log(field)
-
     setSpecialties(
       produce(specialties, (draftSpecialties) => {
         if (draftSpecialties.includes(value)) {
@@ -78,21 +80,31 @@ const CustomizedDialogs: React.FC<CustomizedDialogsProps> = ({ open, handleClose
         }
       })
     );
-  
-    setFormData({
+
+  };
+
+  const handleSave = () => {
+    // Update only the specialties property of jobFormData
+    setJobFormData({
       ...jobFormData,
-      specialties, // Use the updated specialties directly
+      specialties,
     });
+    handleClose();
   };
   return (
     <React.Fragment>
-      <BootstrapDialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open} fullWidth={true}>
-        <DialogTitle sx={{
+      <BootstrapDialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open} fullScreen={true} sx={
+        {
+          padding: isMobile ? '0' : ' 2% 8% '
+        }
+      }>
+        <DialogTitle textAlign='center' sx={{
           m: 0, p: 1,
           background: 'black',
-          color: 'white'
+          color: 'white',
+          fontSize: '25px'
         }} id="customized-dialog-title">
-          Select What types of cases do you mostly work on
+          Select the types of cases you mostly work on
         </DialogTitle>
         <IconButton
           aria-label="close"
@@ -135,47 +147,61 @@ const CustomizedDialogs: React.FC<CustomizedDialogsProps> = ({ open, handleClose
               <Box sx={{
                 display: 'flex', justifyContent: 'center', alignContent: 'center', flexWrap: 'wrap', gap: '5px', marginLeft: '10px'
               }}>
-                {Array.isArray(steps[3].options)
-                  ? steps[3].options.map((option, optionIndex) => (
-                    <Chip
-                      key={optionIndex}
-                      label={option.toUpperCase()}
-                      onClick={() => handleChange(steps[3].name as FormDataKeys, option)}
-
-                      sx={{
-                        border: '1px solid white',
-                        backgroundColor: jobFormData[steps[3].name as FormDataKeys]?.includes(option) ? 'white' : 'black',
-                        color: jobFormData[steps[3].name as FormDataKeys]?.includes(option) ? 'black' : 'white',
-                        margin: '3px',
-                        borderRadius: '0px',
-                        fontSize: '12px',
-                        fontFamily: 'inherit',
-                        padding: '5px !important',
-
-                        '&:hover': {
-                          backgroundColor: jobFormData[steps[3].name as FormDataKeys]?.includes(option) ? 'white' : '#444', // Change background color on hover
-                          color: jobFormData[steps[3].name as FormDataKeys]?.includes(option) ? 'black' : 'white', // Change text color on hover
-                        },
-                        '&:focus': {
-                          backgroundColor: jobFormData[steps[3].name as FormDataKeys]?.includes(option) ? 'white' : '#666', // Change background color on focus
-                          color: jobFormData[steps[3].name as FormDataKeys]?.includes(option) ? 'black' : 'white', // Change text color on focus
-                          boxShadow: '0 0 0 2px #ffffff', // Add box shadow on focus
-                          outline: 'none', // Remove default focus outline
-                        }
-                      }}
-                    />
-                  ))
-                  : ''
-                }
+                {Array.isArray(steps[3].options) && steps[3].options.map((option, optionIndex) => (
+                  <Chip
+                    key={optionIndex}
+                    label={option.toUpperCase()}
+                    onClick={() => handleChange(steps[3].name as FormDataKeys, option)}
+                    sx={{
+                      border: '1px solid white',
+                      backgroundColor: specialties.includes(option) ? 'white' : 'black',
+                      color: specialties.includes(option) ? 'black' : 'white',
+                      margin: '3px',
+                      borderRadius: '0px',
+                      fontSize: '12px',
+                      fontFamily: 'inherit',
+                      padding: '5px !important',
+                      '&:hover': {
+                        backgroundColor: specialties.includes(option) ? 'white' : '#444',
+                        color: specialties.includes(option) ? 'black' : 'white',
+                      },
+                      '&:focus': {
+                        backgroundColor: specialties.includes(option) ? 'white' : '#666',
+                        color: specialties.includes(option) ? 'black' : 'white',
+                        boxShadow: '0 0 0 2px #ffffff',
+                        outline: 'none',
+                      }
+                    }}
+                  />
+                ))}
               </Box>
             </Box>
           </Box>
         </DialogContent>
-        <DialogActions sx={{
+        <DialogActions color='success' sx={{
           background: 'black',
-          color: 'white'
+          color: 'white  ',
+          textAlign: 'center',
+          display: 'flex',
+          justifyContent: 'center'
+
         }}>
-          <Button autoFocus onClick={handleClose}>
+          <Button autoFocus onClick={handleSave} sx={{
+            backgroundColor: '#19ff85',
+            color: 'black',
+            fontWeight: '900',
+            fontSize: '2rem',
+            padding: '5px 10px',
+            fontFamily: 'sans-serif',
+            width: '20vw',
+            lineHeight: '1.2',
+            '&:hover': {
+              backgroundColor: 'black',
+              color: '#19ff85',
+              border: '1px solid #19ff85',
+            },
+
+          }}>
             Done
           </Button>
         </DialogActions>

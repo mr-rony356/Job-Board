@@ -4,7 +4,6 @@ import stepsData from '../components/steps.json';
 import { useMediaQuery, useTheme } from '@mui/material';
 import { useJobContext } from '../context/FormDataContext';
 import CustomizedDialogs from './Modal';
-import { produce } from 'immer';
 type FormDataKeys = keyof FormData;
 interface Step {
     label: string;
@@ -14,8 +13,8 @@ interface Step {
 }
 
 interface FormData {
-    state: string;
-    city: string;
+    State: string;
+    City: string;
     practiceArea: string[];
     specialties: string[];
 }
@@ -36,8 +35,8 @@ const FilterItems: React.FC = () => {
     const [specialties, setSpecialties] = useState<string[]>(jobFormData.specialties);
 
     const [formData, setFormData] = useState<FormData>({
-        state: jobFormData.state,
-        city: jobFormData.city,
+        State: jobFormData.State,
+        City: jobFormData.City,
         practiceArea: jobFormData['practiceArea'],
         specialties: jobFormData['specialties'],
     });
@@ -51,40 +50,27 @@ const FilterItems: React.FC = () => {
     const handleChange = (field: keyof FormData, value: string) => {
         let updatedValue: string[] = [];
         if (field === 'specialties') {
-            setSpecialties(
-                produce(specialties, (draftSpecialties) => {
-                  if (draftSpecialties.includes(value)) {
-                    // If the value exists, remove it
-                    const index = draftSpecialties.indexOf(value);
-                    draftSpecialties.splice(index, 1);
-                  } else {
-                    // If the value doesn't exist, add it
-                    draftSpecialties.push(value);
-                  }
-                })
-              );
-            
-              setJobFormData({
-                ...jobFormData,
-                specialties, // Use the updated specialties directly
-              });
+            setSpecialties({
+                ...specialties
+                
+            });
 
             handleClickOpen()
 
         }
-        if (field === 'state') {
+        if (field === 'State') {
             updatedValue = [value];
             setFormData({
                 ...formData,
-                state: value,
-                city: '', // Reset city when a new state is selected
+                State: value,
+                City: '', // Reset City when a new State is selected
             });
             // console.log('data after click', formData); // Log the formData after it has been updated
-        } else if (field === 'city') {
+        } else if (field === 'City') {
             updatedValue = [value];
             setFormData({
                 ...formData,
-                city: value,
+                City: value,
             });
         } else {
             updatedValue = formData[field].includes(value)
@@ -164,34 +150,34 @@ const FilterItems: React.FC = () => {
                                     }}
                                 />
                             ))
-                            : step.name === 'city' // Check if step is 'city'
-                                ? Object.entries(step.options).map(([state, cities]) =>
+                            : step.name === 'City' // Check if step is 'City'
+                                ? Object.entries(step.options).map(([State, cities]) =>
                                     Array.isArray(cities) ? ( // Check if cities is an array
-                                        cities.map((city, cityIndex) => (
+                                        cities.map((City, cityIndex) => (
                                             <Chip
                                                 key={cityIndex}
-                                                label={city === '' ? "No City " : city.toUpperCase()}
-                                                onClick={() => handleChange(step.name as FormDataKeys, city)}
+                                                label={City === '' ? "No City " : City.toUpperCase()}
+                                                onClick={() => handleChange(step.name as FormDataKeys, City)}
                                                 sx={{
                                                     border: '1px solid white',
-                                                    backgroundColor: jobFormData[step.name as FormDataKeys]?.includes(city) ? 'white' : 'black',
-                                                    color: jobFormData[step.name as FormDataKeys]?.includes(city) ? 'black' : 'white',
+                                                    backgroundColor: jobFormData[step.name as FormDataKeys]?.includes(City) ? 'white' : 'black',
+                                                    color: jobFormData[step.name as FormDataKeys]?.includes(City) ? 'black' : 'white',
                                                     margin: '3px',
                                                     borderRadius: '0px',
                                                     fontSize: '12px',
                                                     fontFamily: 'inherit',
 
                                                     '&:hover': {
-                                                        backgroundColor: jobFormData[step.name as FormDataKeys]?.includes(city) ? 'white' : '#444',
-                                                        color: jobFormData[step.name as FormDataKeys]?.includes(city) ? 'black' : 'white',
+                                                        backgroundColor: jobFormData[step.name as FormDataKeys]?.includes(City) ? 'white' : '#444',
+                                                        color: jobFormData[step.name as FormDataKeys]?.includes(City) ? 'black' : 'white',
                                                     },
                                                     '&:focus': {
-                                                        backgroundColor: jobFormData[step.name as FormDataKeys]?.includes(city) ? 'white' : '#666',
-                                                        color: jobFormData[step.name as FormDataKeys]?.includes(city) ? 'black' : 'white',
+                                                        backgroundColor: jobFormData[step.name as FormDataKeys]?.includes(City) ? 'white' : '#666',
+                                                        color: jobFormData[step.name as FormDataKeys]?.includes(City) ? 'black' : 'white',
                                                         boxShadow: '0 0 0 2px #ffffff',
                                                         outline: 'none',
                                                     },
-                                                    display: formData.city[0] === city || formData.state === state || formData.state === '' ? '' : 'none'
+                                                    display: formData.City[0] === City || formData.State === State || formData.State === '' ? '' : 'none'
                                                 }}
                                             />
                                         ))
@@ -236,7 +222,7 @@ const FilterItems: React.FC = () => {
                 </Box>
 
             ))}
-            <CustomizedDialogs open={open} handleClose={handleClose} />
+            <CustomizedDialogs open={open} handleClose={handleClose}  initialSpecialties={jobFormData.specialties}/>
         </Box>
     );
 };

@@ -14,8 +14,8 @@ interface Step {
 }
 
 interface FormData {
-  state: string;
-  city: string;
+  State: string;
+  City: string;
   practiceArea: string[];
   specialties: string[];
   clicked?: string;
@@ -28,10 +28,10 @@ const JobSearchForm = () => {
   const { jobFormData, setJobFormData } = useJobContext();
 
   const [step, setStep] = useState(1);
-  const [state, setState] = useState('');
+  const [State, setState] = useState('');
   const [formData, setFormData] = useState<FormData>({
-    state: jobFormData.state,
-    city: jobFormData.city,
+    State: jobFormData.State,
+    City: jobFormData.City,
     practiceArea: [],
     specialties: [],
   });
@@ -59,20 +59,20 @@ const JobSearchForm = () => {
   };
 
   const handleNext = () => {
-    if (state === 'Remote' && step === 1) {
+    if (State === 'Remote' && step === 1) {
       setStep(step + 2);
     } else {
       setStep(step + 1);
     }
 
-    if (state === '') {
+    if (State === '') {
       setStep(step);
       alert('Please Select One');
     }
   };
 
   const handlePrevious = () => {
-    if (state === 'Remote' && step === 3) {
+    if (State === 'Remote' && step === 3) {
       setStep(step - 2);
     } else {
       setStep(step - 1);
@@ -104,7 +104,7 @@ const JobSearchForm = () => {
               </Button>
             ))
             : Object.entries(options).map(([key, value]) => {
-              if (key === state) {
+              if (key === State) {
                 return (
                   <Box key={key} sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
                     {value.map((option) => (

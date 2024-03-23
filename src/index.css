@@ -43,6 +43,11 @@ a:hover{
   }
   
 }
-.css-i4bv87-MuiSvgIcon-root{
+/* .css-i4bv87-MuiSvgIcon-root{
   display: none !important;
+} */
+/* Add CSS for placeholder text */
+input::placeholder,
+textarea::placeholder {
+    color: white; /* Placeholder text color */
 }
