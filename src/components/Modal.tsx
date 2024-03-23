@@ -7,7 +7,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
-import { Typography, Box, Chip, useTheme, useMediaQuery } from '@mui/material';
+import { Box, Chip, useTheme, useMediaQuery } from '@mui/material';
 import stepsData from '../components/steps.json';
 import { useJobContext } from '../context/FormDataContext';
 import { produce } from 'immer';
@@ -68,6 +68,7 @@ const CustomizedDialogs: React.FC<CustomizedDialogsProps> = ({
   }, [initialSpecialties]);
 
   const handleChange = (field: keyof FormData, value: string) => {
+    console.log(field)
     setSpecialties(
       produce(specialties, (draftSpecialties) => {
         if (draftSpecialties.includes(value)) {
@@ -99,10 +100,10 @@ const CustomizedDialogs: React.FC<CustomizedDialogsProps> = ({
         }
       }>
         <DialogTitle textAlign='center' sx={{
-          m: 0, p: 1,
+          m: 0, pt: 4,
           background: 'black',
           color: 'white',
-          fontSize: '25px'
+          fontSize:isMobile?'18px': '25px'
         }} id="customized-dialog-title">
           Select the types of cases you mostly work on
         </DialogTitle>
@@ -112,7 +113,7 @@ const CustomizedDialogs: React.FC<CustomizedDialogsProps> = ({
           sx={{
             position: 'absolute',
             right: 8,
-            top: 8,
+            top:isMobile? 0:8,
             color: 'white',
           }}
         >
@@ -135,15 +136,6 @@ const CustomizedDialogs: React.FC<CustomizedDialogsProps> = ({
               display: 'flex',
               flexDirection: 'column', alignItems: 'center', justifyContent: 'center', marginBottom: '10px'
             }}>
-              <Typography variant="h5" style={{
-                color: 'white',
-                fontFamily: 'inherit',
-                fontSize: '1.5rem',
-                letterSpacing: '2px',
-                margin: '20px 0'
-              }}>
-                {steps[3].label}
-              </Typography>
               <Box sx={{
                 display: 'flex', justifyContent: 'center', alignContent: 'center', flexWrap: 'wrap', gap: '5px', marginLeft: '10px'
               }}>
@@ -190,10 +182,10 @@ const CustomizedDialogs: React.FC<CustomizedDialogsProps> = ({
             backgroundColor: '#19ff85',
             color: 'black',
             fontWeight: '900',
-            fontSize: '2rem',
-            padding: '5px 10px',
+            fontSize: isMobile?'1.5rem':'2rem',
+            padding:"5px 100px",
             fontFamily: 'sans-serif',
-            width: '20vw',
+            width: isMobile?'50vw': '20vw',
             lineHeight: '1.2',
             '&:hover': {
               backgroundColor: 'black',
