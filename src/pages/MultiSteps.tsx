@@ -30,8 +30,8 @@ const JobSearchForm = () => {
   const [step, setStep] = useState(1);
   const [State, setState] = useState('');
   const [formData, setFormData] = useState<FormData>({
-    State: jobFormData.State,
-    City: jobFormData.City,
+    State: jobFormData.State ? jobFormData.State[0] : '', // Assuming State is always an array with one element
+    City: jobFormData.City ? jobFormData.City[0] : '', // Assuming City is always an array with one element
     practiceArea: [],
     specialties: [],
   });
@@ -79,10 +79,19 @@ const JobSearchForm = () => {
     }
   };
   const handleSubmit = () => {
-    setJobFormData(formData);
-    // Implement logic to show qualified opportunities
-  };
+    // Converting City and State to strings before setting formData
+    const updatedFormData = {
+      ...formData,
+      City: formData.City.toString(), // Convert to string
+      State: formData.State.toString(), // Convert to string
+    };
 
+    console.log('formData', updatedFormData);
+    setJobFormData(updatedFormData);
+    // Implement logic to show qualified opportunities
+    console.log('neeeed thiss', updatedFormData)
+
+  };
   const renderOptions = (stepItem: Step) => {
     const { question, options } = stepItem;
 
@@ -137,7 +146,7 @@ const JobSearchForm = () => {
           {steps.map((stepItem, index) => (
             <Box key={index} style={{ padding: '20px 5px' }}>
               <Typography variant="h2" style={{ color: step === index + 1 ? '#4caf50' : 'white', fontWeight: 'bold', fontSize: isMobile ? '12px' : '14px', letterSpacing: '2px' }}>
-                {stepItem.label + ' >'}
+                {stepItem.label}{index !== steps.length - 1 ? ' >' : ''}
               </Typography>
             </Box>
           ))}
@@ -168,7 +177,18 @@ const JobSearchForm = () => {
       }}>
         {renderStep()}
         <Box>
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          <Box sx={{
+            display: 'flex', flexDirection: 'column', gap: 2,
+            ...(step === 4 ? {
+              position: 'fixed',
+              bottom: '0', overflow: 'hidden',
+              background: 'black', width: '100%',
+              left:'0',
+              justifyContent:'center',
+              alignItems:'center',
+              padding:'20px 0'
+            } : {})
+          }}>
             {step < steps.length ?
               (
                 <Button

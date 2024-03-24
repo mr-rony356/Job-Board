@@ -42,7 +42,6 @@ const FilterItems: React.FC = () => {
     });
     const [steps] = useState<Step[]>(stepsData.steps);
     useEffect(() => {
-        console.log(' calleddddddddddddddd:');
         setJobFormData(formData)
 
     }, [formData]);
@@ -80,6 +79,11 @@ const FilterItems: React.FC = () => {
                 ...formData,
                 [field]: updatedValue
             });
+            if (field === 'specialties') {
+                handleClickOpen()
+    
+            }
+    
         }
 
     };
@@ -222,7 +226,7 @@ const FilterItems: React.FC = () => {
                 </Box>
 
             ))}
-            <CustomizedDialogs open={open} handleClose={handleClose}  initialSpecialties={jobFormData.specialties}/>
+            <CustomizedDialogs open={open} handleClose={handleClose}  initialSpecialties={formData.specialties}/>
         </Box>
     );
 };

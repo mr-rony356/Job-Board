@@ -23,7 +23,7 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/multi" element={<MultiSteps />} />
         <Route path="/" element={<Joblisting />} />
-        <Route path="/job-details" element={< JobDetails/>} />
+        <Route path="/job-details" element={< JobDetails />} />
         </Routes>
         </FilteredResultsProvider>
 

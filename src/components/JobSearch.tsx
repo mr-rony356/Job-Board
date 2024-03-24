@@ -51,6 +51,13 @@ const JobSearch: React.FC<JobSearchProps> = ({ jobDetails }) => {
 
     const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
         setSearchQuery(event.target.value.trim().toLowerCase());
+        if(
+            event.target.value ===''
+        )
+        {
+            setSearchQuery('');
+            setFilteredResults([]);
+        }
     };
 
     const handleSearchIconClick = (jobDetails: Job[]) => {

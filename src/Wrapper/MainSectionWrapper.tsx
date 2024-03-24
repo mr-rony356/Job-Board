@@ -15,7 +15,8 @@ const MainSectionWrapper: React.FC<MainSectionWrapperProps> = ({ children }) => 
       display:'flex',
       justifyContent:'space-between',
       alignItems:'center',
-      flexDirection:'column'
+      flexDirection:'column',
+      position:'relative'
 
     }}>
       {children}

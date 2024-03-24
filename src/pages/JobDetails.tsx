@@ -44,11 +44,6 @@ const JobDetails: React.FC<{}> = () => {
     fetchData();
   }, []);
 
-  console.log("Context data:", jobFormData);
-  console.log("All Jobs array:", jobDetails);
-
-  // Filter jobDetails based on jobFormData
-  // Filter jobDetails based on jobFormData
   // Filter jobDetails based on jobFormData
   const filteredJobDetails = jobDetails.filter(job => {
     if (jobFormData.State === 'Remote') {
@@ -79,7 +74,7 @@ const JobDetails: React.FC<{}> = () => {
   console.log('filteredJobDetails', filteredJobDetails)
 
   return (
-      <JobDetailsWrapper>
+    <JobDetailsWrapper>
       <Box
         sx={{
           display: 'flex',
@@ -114,27 +109,27 @@ const JobDetails: React.FC<{}> = () => {
             flexDirection: isMobile ? 'column' : 'row',
           }}
         >
-          <JobSearch jobDetails={jobDetails}></JobSearch>
-          <Box > 
-          <Typography
-            padding={1}
-            fontSize={12}
+          <JobSearch jobDetails={jobDetails} ></JobSearch>
+          <Box >
+            <Typography
+              padding={1}
+              fontSize={12}
 
-            sx={{
-              background: 'black',
-              border: '1px solid white',
-              cursor: 'pointer',
-              padding: '5px',
-              '&:hover': {
-                background: '#11b55e',
-                color:'black'
-                
-            }
-            }}
-            onClick={clearFilters}
-          >
-            Clear All Filers
-          </Typography>
+              sx={{
+                background: 'black',
+                border: '1px solid white',
+                cursor: 'pointer',
+                padding: '5px',
+                '&:hover': {
+                  background: '#11b55e',
+                  color: 'black'
+
+                }
+              }}
+              onClick={clearFilters}
+            >
+              Clear All Filers
+            </Typography>
 
           </Box>
         </Box>
@@ -142,27 +137,23 @@ const JobDetails: React.FC<{}> = () => {
           sx={{ borderColor: '#19ff85', width: '100%', borderWidth: '1.5px' }}
         />
         <Box>
-          {jobFormData.City || jobFormData.State || jobFormData.practiceArea?.length || jobFormData.specialties?.length ? (
-            filteredJobDetails.length > 0 ? (
-              <AccordionUsage jobDetails={filteredJobDetails} />
-            )
-            :
-            
-              (
-              <Typography variant="body1" margin={2}>No matching jobs found</Typography>
-            )
+          {filteredJobDetails.length >0 ||jobFormData.City || jobFormData.State || jobFormData.practiceArea?.length || jobFormData.specialties?.length ? (
+
+            <AccordionUsage jobDetails={filteredJobDetails} />
+
+
           ) :
-                  filteredResults.length > 0 ? 
-            <AccordionUsage jobDetails={filteredResults} />
-            : (
-            <AccordionUsage jobDetails={jobDetails} />
-          )}
+            filteredResults.length > 0 ?
+              <AccordionUsage jobDetails={filteredResults} />
+              : (
+                <AccordionUsage jobDetails={jobDetails} />
+              )}
         </Box>
 
       </Box>
 
     </JobDetailsWrapper>
-      
+
   );
 };
 
