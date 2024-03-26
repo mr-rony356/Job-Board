@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Dialog, TextField, Button, Box } from '@mui/material';
 import emailjs from 'emailjs-com';
+import { useMediaQuery, useTheme } from '@mui/material';
 
 interface JobDetail {
   JobID: number;
@@ -22,6 +23,9 @@ interface Props {
 }
 
 const JobApplicationModal: React.FC<Props> = ({ open, onClose, jobDetails }) => {
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -90,30 +94,29 @@ const JobApplicationModal: React.FC<Props> = ({ open, onClose, jobDetails }) => 
 
   return (
     <Dialog
-      fullScreen={false}
+      fullWidth={true}
       open={open}
       onClose={onClose}
       aria-labelledby="job-application-dialog"
       aria-describedby="job-application-form"
-      maxWidth='md'
+      maxWidth={isMobile?'xl':'sm'}
       PaperProps={{
         sx: {
           bgcolor: 'white',
-          backdropFilter: 'blur(8px)',
         },
       }}
     >
       <Box
         sx={{
-          width: 600,
           bgcolor: 'white',
           color: 'black',
           borderRadius: '8px',
-          padding: '20px 20px',
+          padding: isMobile?'20px' :'20px',
           margin:'50px 0',
           display:'flex',
           justifyContent:'center',
           alignItems:'center'
+          
         }}
       >
         <form onSubmit={handleSubmit} style={{
@@ -122,7 +125,7 @@ const JobApplicationModal: React.FC<Props> = ({ open, onClose, jobDetails }) => 
           alignItems:'center',
           flexDirection:'column',
           gap:'10px',
-          width:'70%',
+          width:isMobile?'100%':'70%',
           position:'relative'
         }}>
           <TextField
@@ -197,7 +200,7 @@ const JobApplicationModal: React.FC<Props> = ({ open, onClose, jobDetails }) => 
           <Button type="submit" variant="contained" color="primary" sx={{
             margin:'25px 0',
             background:'black',
-            width:'300px',
+            width:isMobile?'200px':'300px',
             fontSize:'20px'
 ,            padding:'15px 0',
             '&:hover': {
