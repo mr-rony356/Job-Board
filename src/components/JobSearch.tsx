@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, ChangeEvent } from 'react';
-import { Box, IconButton, InputBase } from '@mui/material';
-import SearchIcon from '@mui/icons-material/Search';
+import { Box, Button, InputBase, useMediaQuery, useTheme } from '@mui/material';
+import { useJobContext } from '../context/FormDataContext';
 
 interface Job {
     JobID: number;
@@ -12,6 +12,8 @@ interface Job {
     JobPostTitle: string;
     PracticeArea: string;
     length: string;
+    Cases: string[];
+
     // Add other job properties here
 }
 
@@ -43,79 +45,90 @@ export const FilteredResultsProvider: React.FC<{ children: React.ReactNode }> = 
 
 interface JobSearchProps {
     jobDetails: Job[];
-}
-
-const JobSearch: React.FC<JobSearchProps> = ({ jobDetails }) => {
-    const [searchQuery, setSearchQuery] = useState<string>('');
+    setSearchQuery: React.Dispatch<React.SetStateAction<string>>;
+    searchQuery:string
+  }
+  
+const JobSearch: React.FC<JobSearchProps> = ({  jobDetails, searchQuery, setSearchQuery  }) => {
     const { setFilteredResults } = useFilteredResultsContext();
-
+    const {  setJobFormData } = useJobContext();
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  
     const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
-        setSearchQuery(event.target.value.trim().toLowerCase());
-        if(
-            event.target.value ===''
-        )
-        {
-            setSearchQuery('');
-            setFilteredResults([]);
-        }
+      setSearchQuery(event.target.value.trim().toLowerCase());
+      if (event.target.value === '') {
+        setSearchQuery('');
+        setFilteredResults([]);
+      }
+     
     };
-
-    const handleSearchIconClick = (jobDetails: Job[]) => {
+  
+    const handleSearchIconClick = () => {
         const newFilteredResults = jobDetails.filter((job) =>
-            Object.values(job).some(
-                (value) => typeof value === 'string' && value.toLowerCase().includes(searchQuery)
-            )
+          Object.values(job).some(
+            (value) => typeof value === 'string' && value.toLowerCase().includes(searchQuery)
+          )
         );
-        setFilteredResults(newFilteredResults);
-    };
-
+        if (searchQuery != ''){
+          setFilteredResults(newFilteredResults);
+          setSearchQuery(''); // Clear search input value
+          setJobFormData({
+            State: '',
+            City: '',
+            practiceArea: [],
+            specialties: [],
+          });
+  
+        }
+      };
+  
     return (
-        <Box sx={{
-            position:'relative',
+      <Box sx={{ position: 'relative' }}>
+        <InputBase
+          value={searchQuery}
+          placeholder="Keyword Search"
+          size="medium"
+          onChange={handleSearchChange}
+          fullWidth
+          sx={{
+            '& .MuiInputBase-input': { color: 'white' },
+            color: 'white',
+            width:isMobile? '300px':'350px',
+            padding: '5px 10px', // Adjust padding as needed
+            backgroundColor: '#000',
+            outline: 'white',
+            border: '1px solid #1c663f',
+            '&:hover': {
+              border: '1px solid #1b663f',
+            },
+            '&.focused': {
+              border: '2px solid #1c663f',
+            },
+          }}
+        />
+        <Button
+          onClick={handleSearchIconClick}
+          sx={{
+            position: 'absolute',
+            right: '1px',
+            color: 'white',
+            top:'5px',
+            border:'none',
+            textTransform:'capitalize',
+            borderRadius:'0px',
+            paddingBottom:'10px',
+            background:'19ff85',
+            '&:hover': {
+              color:'gray'
 
-        }}>
-            <InputBase
-                value={searchQuery}
-                placeholder='Keyword Search'
-                size='small'
-                onChange={handleSearchChange}
-                fullWidth
-                sx={{
-                    '& .MuiInputBase-input': { color: 'white' } ,
-                    color: 'white',
-                    width: '300px',
-                    padding: '5px 10px', // Adjust padding as needed
-                    backgroundColor: '#000',
-                    outline:'white',
-                    border: '1px solid #1c663f',
-                    '&:hover': {
-                        border: '1px solid #1b663f',
-                    },
-                    '&.focused': {
-                        border: '2px solid #1c663f',
-
-                    },
-                }}
-            />
-            <IconButton
-                onClick={() => handleSearchIconClick(jobDetails)} // Assuming jobDetails is available
-                sx={{
-                    position:'absolute',
-                    right:'5px',
-                    color: 'white',
-                    '&:hover': {
-                        borderColor: '#1c663f',
-                    }
-                }}
-            >
-                <SearchIcon />
-            </IconButton>
-
-            <Box>
-                {/* Display filtered results */}
-            </Box>
-        </Box>
+            },
+          }}
+        >
+          Search
+        </Button>
+      </Box>
     );
-};
-
+  };
+  
 export default JobSearch;

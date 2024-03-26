@@ -1,28 +1,96 @@
-import React from 'react';
-import { Dialog, TextField, Button, Box, IconButton } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
+import React, { useState, useEffect } from 'react';
+import { Dialog, TextField, Button, Box } from '@mui/material';
+import emailjs from 'emailjs-com';
+
+interface JobDetail {
+  JobID: number;
+  FirmID: string;
+  Firm: string;
+  City: string;
+  State: string;
+  JobDescription: string;
+  JobPostTitle: string;
+  PracticeArea: string;
+  Cases: string[];
+
+}
 
 interface Props {
   open: boolean;
   onClose: () => void;
+  jobDetails: JobDetail[];
 }
 
-const JobApplicationModal: React.FC<Props> = ({ open, onClose }) => {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+const JobApplicationModal: React.FC<Props> = ({ open, onClose, jobDetails }) => {
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    cellNumber: '',
+    personalEmail: '',
+    State: '',
+    City: '',
+    Firm: '',
+    PracticeArea:'',
+    JobPostTitle:'',
+    specialties: [] as string[],
+
+  });
+
+  useEffect(() => {
+    // Set City and State from the first job detail (assuming it's available)
+    if (jobDetails.length > 0) {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        City: jobDetails[0].City,
+        State: jobDetails[0].State,
+        JobPostTitle: jobDetails[0].JobPostTitle,
+        Firm: jobDetails[0].Firm,
+        PracticeArea: jobDetails[0].PracticeArea,
+        specialties: jobDetails[0].Cases,
+      }));
+    }
+  }, [jobDetails]);
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    const formDataObj: any = {};
-    formData.forEach((value, key) => {
-      formDataObj[key] = value;
-    });
-    console.log(formDataObj);
-    // You can handle form submission here, e.g., send data to server
-    onClose(); // Close the dialog after form submission
+    const currentDate = new Date().toLocaleDateString('en-US', { timeZone: 'UTC' });
+
+    try {
+      await emailjs.send('service_e8j9s9a', 'template_vk7obtx', {
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        cellNumber: formData.cellNumber,
+        personalEmail: formData.personalEmail,
+        State: formData.State,
+        City: formData.City,
+        Firm: formData.Firm,
+        jobTitle: formData.JobPostTitle,
+        practiceArea: formData.PracticeArea,
+        specialties: formData.specialties.join(', '),
+        date:currentDate
+      }, 'Yt0_FXKk8p02kuzC4');
+
+      console.log('Email sent successfully');
+      onClose();
+       // Redirect to /thankyou page
+    window.location.href = '/thank-you';
+    } catch (error) {
+      // Handle error (e.g., show an error message)
+      console.error('Error sending email:', error);
+    }
   };
 
   return (
     <Dialog
-    fullScreen={false}
+      fullScreen={false}
       open={open}
       onClose={onClose}
       aria-labelledby="job-application-dialog"
@@ -30,32 +98,33 @@ const JobApplicationModal: React.FC<Props> = ({ open, onClose }) => {
       maxWidth='md'
       PaperProps={{
         sx: {
-          bgcolor: 'rgba(0, 0, 0, 0.5)', // Transparent black background
-          backdropFilter: 'blur(8px)', // Blur effect
+          bgcolor: 'white',
+          backdropFilter: 'blur(8px)',
         },
       }}
     >
       <Box
         sx={{
-          width: 400,
-          bgcolor: 'rgba(255, 255, 255, 0.2)', // Transparent white background
-          color: 'white',
+          width: 600,
+          bgcolor: 'white',
+          color: 'black',
           borderRadius: '8px',
-          padding: '20px',
+          padding: '20px 20px',
+          margin:'50px 0',
+          display:'flex',
+          justifyContent:'center',
+          alignItems:'center'
         }}
       >
-        <IconButton
-          onClick={onClose}
-          sx={{
-            position: 'absolute',
-            top: 5,
-            right: 5,
-            color: 'white',
-          }}
-        >
-          <CloseIcon />
-        </IconButton>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} style={{
+          display:'flex',
+          justifyContent:'center',
+          alignItems:'center',
+          flexDirection:'column',
+          gap:'10px',
+          width:'70%',
+          position:'relative'
+        }}>
           <TextField
             id="firstName"
             name="firstName"
@@ -64,11 +133,13 @@ const JobApplicationModal: React.FC<Props> = ({ open, onClose }) => {
             fullWidth
             margin="normal"
             InputLabelProps={{
-              style: { color: 'white' },
+              style: { color: 'black' },
             }}
             InputProps={{
-              style: { color: 'white' },
+              style: { color: 'black', padding:'10px 0' },
             }}
+            value={formData.firstName}
+            onChange={handleInputChange}
             required
           />
           <TextField
@@ -79,11 +150,13 @@ const JobApplicationModal: React.FC<Props> = ({ open, onClose }) => {
             fullWidth
             margin="normal"
             InputLabelProps={{
-              style: { color: 'white' },
+              style: { color: 'black' },
             }}
             InputProps={{
-              style: { color: 'white' },
+              style: { color: 'black', padding:'10px 0' },
             }}
+            value={formData.lastName}
+            onChange={handleInputChange}
             required
           />
           <TextField
@@ -94,11 +167,13 @@ const JobApplicationModal: React.FC<Props> = ({ open, onClose }) => {
             fullWidth
             margin="normal"
             InputLabelProps={{
-              style: { color: 'white' },
+              style: { color: 'black' },
             }}
             InputProps={{
-              style: { color: 'white' },
+              style: { color: 'black', padding:'10px 0' },
             }}
+            value={formData.cellNumber}
+            onChange={handleInputChange}
             required
           />
           <TextField
@@ -109,14 +184,27 @@ const JobApplicationModal: React.FC<Props> = ({ open, onClose }) => {
             fullWidth
             margin="normal"
             InputLabelProps={{
-              style: { color: 'white' },
+              style: { color: 'black' },
             }}
             InputProps={{
-              style: { color: 'white' },
+              style: { color: 'black', padding:'10px 0' },
             }}
+            value={formData.personalEmail}
+            onChange={handleInputChange}
             required
           />
-          <Button type="submit" variant="contained" color="primary">
+          {/* Other form fields */}
+          <Button type="submit" variant="contained" color="primary" sx={{
+            margin:'25px 0',
+            background:'black',
+            width:'300px',
+            fontSize:'20px'
+,            padding:'15px 0',
+            '&:hover': {
+              backgroundColor: '#19ff85',
+              color: 'black',
+            }
+          }}>
             Submit
           </Button>
         </form>

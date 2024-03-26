@@ -2,13 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Box, Divider, Typography, useMediaQuery, useTheme } from '@mui/material';
 import JobDetailsWrapper from '../Wrapper/JobDetailsWrapper';
 import { useJobContext } from '../context/FormDataContext';
-import YourComponent from '../components/FiltersOption';
+import FilterItems from '../components/FiltersOption';
 import AccordionUsage from '../components/JobResult';
-// import CustomizedHook from '../components/SearchBar';
 import JobSearch from '../components/JobSearch';
 import { useFilteredResultsContext } from '../components/JobSearch'; // Import FilteredResultsProvider
 
-// Define the Job interface
 interface Job {
   JobID: number;
   FirmID: string;
@@ -23,12 +21,15 @@ interface Job {
 }
 
 const JobDetails: React.FC<{}> = () => {
-  const { filteredResults } = useFilteredResultsContext(); // Access filtered results from context
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const { jobFormData, setJobFormData } = useJobContext();
   const [jobDetails, setJobDetails] = useState<Job[]>([]);
+  const [cleared, setCleared] = useState(false);
+  const { filteredResults, setFilteredResults } = useFilteredResultsContext();
+  const [searchQuery, setSearchQuery] = useState<string>('');
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -44,35 +45,51 @@ const JobDetails: React.FC<{}> = () => {
     fetchData();
   }, []);
 
-  // Filter jobDetails based on jobFormData
   const filteredJobDetails = jobDetails.filter(job => {
     if (jobFormData.State === 'Remote') {
       return (
         jobFormData.practiceArea?.some(area => job.PracticeArea.includes(area.toUpperCase())) &&
         jobFormData.specialties?.every(specialty => job.Cases.some(caseValue => caseValue.toUpperCase() === specialty.toUpperCase()))
       );
-
     } else {
       return (
         jobFormData.City === job.City &&
         jobFormData.State === job.State &&
         jobFormData.practiceArea?.some(area => job.PracticeArea.includes(area.toUpperCase())) &&
         jobFormData.specialties?.every(specialty => job.Cases.some(caseValue => caseValue.toUpperCase() === specialty.toUpperCase()))
+
       );
     }
   });
 
-  const clearFilters = () => {
+
+  const handleClearFilters = () => {
     setJobFormData({
       State: '',
       City: '',
       practiceArea: [],
       specialties: [],
     });
+    setSearchQuery(''); // Reset search input value
+    setCleared(true);
+    setFilteredResults([]); // Clear filtered results
+    // setShowAll(true);
   };
-
-  console.log('filteredJobDetails', filteredJobDetails)
-
+console.log('jobsfomdat',jobFormData)
+const renderAccordionUsage = () => {
+  if (filteredJobDetails.length > 0 || jobFormData.State || (jobFormData.City && jobFormData.State) || (jobFormData.City && jobFormData.State && jobFormData.practiceArea?.length) || (jobFormData.City && jobFormData.State && jobFormData.practiceArea?.length && jobFormData.specialties?.length)) {
+    console.log('filter matched');
+    return <AccordionUsage jobDetails={filteredJobDetails} />;
+  } else if (filteredResults.length > 0) {
+    console.log('searched matched');
+    return <AccordionUsage jobDetails={filteredResults} />;
+  } else if (jobDetails.length > 0) {
+    console.log('nothing matched');
+    return <AccordionUsage jobDetails={jobDetails} />;
+  } else {
+    return <Typography>No jobs found.</Typography>;
+  }
+};
   return (
     <JobDetailsWrapper>
       <Box
@@ -97,7 +114,7 @@ const JobDetails: React.FC<{}> = () => {
           </Typography>
         </Box>
         <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
-          <YourComponent />
+          <FilterItems cleared={cleared} />
         </Box>
         <Box
           sx={{
@@ -109,12 +126,11 @@ const JobDetails: React.FC<{}> = () => {
             flexDirection: isMobile ? 'column' : 'row',
           }}
         >
-          <JobSearch jobDetails={jobDetails} ></JobSearch>
-          <Box >
+          <JobSearch jobDetails={jobDetails} searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+          <Box>
             <Typography
               padding={1}
               fontSize={12}
-
               sx={{
                 background: 'black',
                 border: '1px solid white',
@@ -122,38 +138,23 @@ const JobDetails: React.FC<{}> = () => {
                 padding: '5px',
                 '&:hover': {
                   background: '#11b55e',
-                  color: 'black'
-
-                }
+                  color: 'black',
+                },
               }}
-              onClick={clearFilters}
+              onClick={handleClearFilters}
             >
-              Clear All Filers
+              Clear All Filters
             </Typography>
-
           </Box>
         </Box>
         <Divider
           sx={{ borderColor: '#19ff85', width: '100%', borderWidth: '1.5px' }}
         />
         <Box>
-          {filteredJobDetails.length >0 ||jobFormData.City || jobFormData.State || jobFormData.practiceArea?.length || jobFormData.specialties?.length ? (
-
-            <AccordionUsage jobDetails={filteredJobDetails} />
-
-
-          ) :
-            filteredResults.length > 0 ?
-              <AccordionUsage jobDetails={filteredResults} />
-              : (
-                <AccordionUsage jobDetails={jobDetails} />
-              )}
+          {renderAccordionUsage()}
         </Box>
-
       </Box>
-
     </JobDetailsWrapper>
-
   );
 };
 

@@ -7,6 +7,7 @@ import Joblisting from "./components/Home";
 import { JobProvider } from "./context/FormDataContext";
 import JobDetails from "./pages/JobDetails";
 import { FilteredResultsProvider } from './components/JobSearch'; // Import FilteredResultsProvider
+import ThankYou  from "./pages/ThankYou";
 
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
         <Route path="/multi" element={<MultiSteps />} />
         <Route path="/" element={<Joblisting />} />
         <Route path="/job-details" element={< JobDetails />} />
+        <Route path="/thank-you" element={< ThankYou />} />
         </Routes>
         </FilteredResultsProvider>
 

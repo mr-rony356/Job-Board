@@ -18,8 +18,11 @@ interface FormData {
     practiceArea: string[];
     specialties: string[];
 }
+interface Cleared {
+    cleared: boolean;
+}
 
-const FilterItems: React.FC = () => {
+const FilterItems = ({ cleared }: Cleared) => {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
     const { jobFormData, setJobFormData } = useJobContext();
@@ -32,7 +35,6 @@ const FilterItems: React.FC = () => {
     const handleClose = () => {
         setOpen(false);
     };
-    const [specialties, setSpecialties] = useState<string[]>(jobFormData.specialties);
 
     const [formData, setFormData] = useState<FormData>({
         State: jobFormData.State,
@@ -41,18 +43,36 @@ const FilterItems: React.FC = () => {
         specialties: jobFormData['specialties'],
     });
     const [steps] = useState<Step[]>(stepsData.steps);
-    useEffect(() => {
-        setJobFormData(formData)
+    // Flag to indicate whether it's the initial render
 
+    useEffect(() => {
+        // Check if it's not the initial render
+            setJobFormData({
+                State: formData.State,
+                City: formData.City,
+                practiceArea: formData.practiceArea,
+                specialties: jobFormData.specialties,
+                // Add other fields as needed
+            });
     }, [formData]);
 
-    const handleChange = (field: keyof FormData, value: string) => {
+    useEffect(() => {
+        // Check if it's not the initial render
+        if (cleared) {
+            // Update only the necessary fields in formData
+            setFormData({
+                State: '',
+                City: '',
+                practiceArea: [],
+                specialties: [],
+            });
+            console.log('loadedddd')
+        }
+    }, [cleared]);
+     const handleChange = (field: keyof FormData, value: string) => {
         let updatedValue: string[] = [];
         if (field === 'specialties') {
-            setSpecialties({
-                ...specialties
-                
-            });
+
 
             handleClickOpen()
 
@@ -60,7 +80,7 @@ const FilterItems: React.FC = () => {
         if (field === 'State') {
             updatedValue = [value];
             setFormData({
-                ...formData,
+                ...jobFormData,
                 State: value,
                 City: '', // Reset City when a new State is selected
             });
@@ -79,14 +99,13 @@ const FilterItems: React.FC = () => {
                 ...formData,
                 [field]: updatedValue
             });
-            if (field === 'specialties') {
-                handleClickOpen()
-    
-            }
-    
+
         }
 
     };
+    console.log('jobs after Loads filter contetx', jobFormData)
+    console.log('jobs after Loads filter  local ', formData)
+    console.log('jobs after Loads filter', cleared)
 
 
     return (
@@ -126,34 +145,22 @@ const FilterItems: React.FC = () => {
                         marginLeft: '10px'
                     }}>
                         {Array.isArray(step.options) && step.name === 'specialties' // Checking if step is 'specialties'
-                            ? step.options.slice(0, 5).map((option, optionIndex) => ( // Only rendering the first 5 options
+                            ? (
                                 <Chip
-                                    key={optionIndex}
-                                    label={option.toUpperCase()}
-                                    onClick={() => handleChange(step.name as FormDataKeys, option)}
+                                    label='Edit Specialties'
+                                    onClick={() => handleChange(step.name as FormDataKeys, '')}
                                     sx={{
                                         border: '1px solid white',
-                                        backgroundColor: jobFormData[step.name as FormDataKeys]?.includes(option) ? 'white' : 'black',
-                                        color: jobFormData[step.name as FormDataKeys]?.includes(option) ? 'black' : 'white',
                                         margin: '3px',
                                         borderRadius: '0px',
-                                        fontSize:'12px',
-                                        fontFamily:'inherit',
-                                        padding:'5px !important',
-
-                                        '&:hover': {
-                                            backgroundColor: jobFormData[step.name as FormDataKeys]?.includes(option) ? 'white' : '#444', // Change background color on hover
-                                            color: jobFormData[step.name as FormDataKeys]?.includes(option) ? 'black' : 'white', // Change text color on hover
-                                        },
-                                        '&:focus': {
-                                            backgroundColor: jobFormData[step.name as FormDataKeys]?.includes(option) ? 'white' : '#666', // Change background color on focus
-                                            color: jobFormData[step.name as FormDataKeys]?.includes(option) ? 'black' : 'white', // Change text color on focus
-                                            boxShadow: '0 0 0 2px #ffffff', // Add box shadow on focus
-                                            outline: 'none', // Remove default focus outline
-                                        }
+                                        color: 'white',
+                                        fontSize: '12px',
+                                        fontFamily: 'inherit',
+                                        padding: '5px !important',
                                     }}
                                 />
-                            ))
+                            )
+
                             : step.name === 'City' // Check if step is 'City'
                                 ? Object.entries(step.options).map(([State, cities]) =>
                                     Array.isArray(cities) ? ( // Check if cities is an array
@@ -226,7 +233,7 @@ const FilterItems: React.FC = () => {
                 </Box>
 
             ))}
-            <CustomizedDialogs open={open} handleClose={handleClose}  initialSpecialties={formData.specialties}/>
+            <CustomizedDialogs open={open} handleClose={handleClose} />
         </Box>
     );
 };

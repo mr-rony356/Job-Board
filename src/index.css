@@ -29,11 +29,6 @@ a:hover{
   background: white !important;
   color: black !important;
 }
-.css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input:focus {
-  outline: green;
-  /* background: red; */
-  border: 1px solid green !important;
-}
 .MuiOutlinedInput-input {
   padding: 5px 35px !important;
 }
@@ -50,4 +45,8 @@ a:hover{
 input::placeholder,
 textarea::placeholder {
     color: white; /* Placeholder text color */
+}
+.MuiAccordionSummary-expandIconWrapper
+{
+  display: none !important;
 }

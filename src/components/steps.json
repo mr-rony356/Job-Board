@@ -6,7 +6,7 @@
       "question": "What State are you looking in?",
       "options": [
         "Florida",
-        "D.C",
+        "D.C.",
         "New York",
         "Texas",
         "Illinois",
@@ -29,8 +29,8 @@
           "Tallahassee",
           "Jacksonville"
         ],
-        "D.C": [
-          "D.C."
+        "D.C.": [
+          "Washington"
         ],
         "New York": [
           "New York"
@@ -65,7 +65,7 @@
         "Education",
         "Energy",
         "Environment",
-        "Erisa-C7B",
+        "Erisa",
         "General Practice",
         "Government",
         "Healthcare",
@@ -173,7 +173,7 @@
         "ENTERTAINMENT",
         "ENVIRONMENT",
         "EQUITY BASED COMP",
-        "ERISA-C&B",
+        "ERISA",
         "ESOP",
         "EUROPEAN UNION LAW",
         "EXEC COMPENSATION",

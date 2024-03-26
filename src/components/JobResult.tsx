@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Box, Button, Divider, Typography, useMediaQuery, useTheme, CircularProgress } from '@mui/material';
+import { Box, Button, Divider, Typography, useMediaQuery, useTheme } from '@mui/material';
 import JobApplicationModal from './FormModal';
 
 // Define the Job interface
@@ -17,6 +17,8 @@ interface Job {
     JobPostTitle: string;
     PracticeArea: string;
     length: string;
+    Cases: string[];
+
     // Field representing Job Post Description
 }
 
@@ -27,7 +29,6 @@ interface AccordionUsageProps {
 
 // Define the AccordionUsage component
 export default function AccordionUsage({ jobDetails }: AccordionUsageProps) {
-    console.log('jobDetails from results ', jobDetails.length)
     const [modalOpen, setModalOpen] = useState<boolean>(false);
 
     const handleModalOpen = () => {
@@ -41,36 +42,14 @@ export default function AccordionUsage({ jobDetails }: AccordionUsageProps) {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
     const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
-    const [loading, setLoading] = useState(true);
 
     const handleChange = (index: number) => {
         setExpandedIndex(prevIndex => (prevIndex === index ? null : index));
     };
-
-    useEffect(() => {
-
-        if (jobDetails.length > 0) {
-            setLoading(false);
-        }
-    }, [jobDetails]);
-
     return (
         <div style={{
             margin: '25px'
         }}>
-            {loading ? (
-                <Box sx={{ textAlign: 'center' }}>
-                    <Typography variant='h1' textAlign='center' sx={{
-                        fontFamily: 'inherit',
-                        color: 'white',
-                        fontSize: '40px',
-                        margin: '25px 0'
-                    }}>
-                        Loading Jobs...
-                    </Typography>
-                    <CircularProgress color="success" />
-                </Box>
-            ) : (
                 <>
 
                     <Typography variant='h1' textAlign='center' sx={{
@@ -103,95 +82,55 @@ export default function AccordionUsage({ jobDetails }: AccordionUsageProps) {
                                 >
                                     <Box sx={{
                                         display: 'flex',
-                                        justifyContent: 'space-between',
                                         alignItems: 'center',
                                         width: '100%',
+                                        gap:isMobile?'30px':'50px'
                                     }} >
                                         <Box sx={{
                                             display: 'flex',
                                             gap: '15px',
                                             alignItems: 'center',
-                                            maxWidth: isMobile ? '60%' : '80%'
                                         }} >
-                                            <Typography variant='h5' fontSize='xl'>
+                                            <Typography variant='h5' sx={{
+                                                fontSize:isMobile?'25px':'35px'
+                                            }} >
                                                 GT
                                             </Typography>
+                                        </Box>
+                                        <Box>
+                                            <Box>
                                             <Typography variant='h1' sx={{
-                                                fontSize: isMobile ? '10px' : '18px',
-                                                maxWidth: isMobile ? '250px' : '380px'
+                                                fontSize: isMobile ? '12px' : '18px',
+                                                margin:'10px 0',
+                                                fontFamily:'inherit'
                                             }} >
                                                 {job.JobPostTitle}
                                             </Typography>
+
+                                            </Box>
+                                            <Box sx={{
+                                                display:'flex',
+                                                gap:isMobile?'50px':'150px'
+                                            }}>
+                                            <Typography variant='body1'
+                                                sx={{
+                                                    fontSize: isMobile ? '12px' : '18px'
+                                                }}>
+                                                {job.PracticeArea}
+                                            </Typography>
+                                            <Typography variant='body1'
+                                                sx={{
+                                                    fontSize: isMobile ? '10px' : '14px'
+                                                }}>
+                                               {job.City} , {job.State} 
+                                            </Typography>
+
+                                            </Box>
+
+
+
+
                                         </Box>
-                                        {
-                                            isMobile ?
-                                                (
-                                                    <Box sx={{
-                                                        display: 'flex',
-                                                        flexDirection: 'column',
-                                                        justifyContent: 'flex-end',
-                                                        alignItems: 'center'
-                                                    }}>
-                                                        <Typography variant='body1'
-                                                            sx={{
-                                                                fontSize: isMobile ? '14px' : '18px'
-                                                            }}>
-                                                            {job.PracticeArea}
-                                                        </Typography>
-
-
-                                                        <Box sx={{
-                                                            display: 'flex',
-                                                            flexDirection: 'column',
-                                                            justifyContent: 'center',
-                                                            alignItems: 'center'
-                                                        }}>
-                                                            <Typography variant='body1'
-                                                                sx={{
-                                                                    fontSize: isMobile ? '10px' : '14px'
-                                                                }}>
-                                                                {job.State}
-                                                            </Typography>
-                                                            <Typography variant='body1'
-                                                                sx={{
-                                                                    fontSize: isMobile ? '10px' : '14px'
-                                                                }}>
-                                                                {job.City}
-                                                            </Typography>
-                                                        </Box>
-
-                                                    </Box>
-
-                                                )
-                                                :
-                                                (
-                                                    <>
-                                                        <Box>
-                                                            <Typography variant='body1'
-                                                                sx={{
-                                                                    fontSize: isMobile ? '14px' : '18px'
-                                                                }}>
-                                                                {job.PracticeArea}
-                                                            </Typography>
-
-
-
-                                                        </Box>
-                                                        <Box>
-                                                            <Typography variant='body1'
-                                                                sx={{
-                                                                    fontSize: isMobile ? '10px' : '14px'
-                                                                }}>
-                                                                {job.State} , {job.City}
-                                                            </Typography>
-                                                        </Box>
-
-
-                                                    </>
-
-
-                                                )
-                                        }
                                     </Box>
                                 </AccordionSummary>
                                 <AccordionDetails>
@@ -202,8 +141,8 @@ export default function AccordionUsage({ jobDetails }: AccordionUsageProps) {
                                         justifyContent: 'space-between',
                                         gap: '50px'
                                     }}>
-                                        <Typography>
-                                            Details: {job.JobDescription}
+                                        <Typography textAlign='justify'>
+                                            {job.JobDescription}
                                         </Typography>
                                         <Box sx={{
                                             display: 'flex',
@@ -212,7 +151,7 @@ export default function AccordionUsage({ jobDetails }: AccordionUsageProps) {
                                             flexDirection: 'column',
                                             gap: '25px'
                                         }}>
-                                            <Typography textAlign='center' margin={2} sx={{
+                                            <Typography textAlign='center' sx={{
                                                 fontSize: '1rem'
                                             }}>
                                                 Interested in discussing this opportunity? Have Chris, Attorney Refruiter &amp; President @ Holtz & Bernard Call Me About This
@@ -224,10 +163,10 @@ export default function AccordionUsage({ jobDetails }: AccordionUsageProps) {
                                                         backgroundColor: '#19ff85',
                                                         color: 'black',
                                                         fontWeight: '900',
-                                                        fontSize: '1rem',
-                                                        padding: '5px 10px',
+                                                        fontSize:isMobile?'1rem': '1.5rem',
+                                                        padding: '20px 10px',
                                                         fontFamily: 'sans-serif',
-                                                        width: '20vw',
+                                                        width: isMobile ? '90vw' : '40vw',
                                                         lineHeight: '1.2',
                                                         '&:hover': {
                                                             backgroundColor: 'black',
@@ -238,7 +177,7 @@ export default function AccordionUsage({ jobDetails }: AccordionUsageProps) {
                                                 >
                                                     I Want To Learn More
                                                 </Button>
-                                                <JobApplicationModal open={modalOpen} onClose={handleModalClose} />
+                                                <JobApplicationModal open={modalOpen} jobDetails={jobDetails} onClose={handleModalClose} />
                                             </>
                                         </Box>
                                     </Box>
@@ -248,7 +187,6 @@ export default function AccordionUsage({ jobDetails }: AccordionUsageProps) {
                         </Box>
                     ))}
                 </>
-            )}
         </div>
     );
 }
