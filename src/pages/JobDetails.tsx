@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Box, Divider, Typography, useMediaQuery, useTheme } from '@mui/material';
 import JobDetailsWrapper from '../Wrapper/JobDetailsWrapper';
 import { useJobContext } from '../context/FormDataContext';
@@ -20,30 +20,20 @@ interface Job {
   length: string;
 }
 
-const JobDetails: React.FC<{}> = () => {
+interface JobDetailsProps {
+  jobDetails: Job[]; // Accept jobDetails as prop
+}
+
+const JobDetails: React.FC<JobDetailsProps> = ({ jobDetails }) => { // Receive jobDetails as prop  
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const { jobFormData, setJobFormData } = useJobContext();
-  const [jobDetails, setJobDetails] = useState<Job[]>([]);
   const [cleared, setCleared] = useState(false);
   const { filteredResults, setFilteredResults } = useFilteredResultsContext();
   const [searchQuery, setSearchQuery] = useState<string>('');
 
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch('https://script.google.com/macros/s/AKfycbzXFc9UKiEv7s20Q_ngE5HUxz-Ipb2MtBoBQZ70Gh47BtVznszGtinKZxjRBeRft5k/exec');
-        const data = await response.json();
-        setJobDetails(data);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-
-    fetchData();
-  }, []);
 
   const filteredJobDetails = jobDetails.filter(job => {
     if (jobFormData.State === 'Remote') {
