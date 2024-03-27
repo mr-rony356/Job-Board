@@ -40,7 +40,6 @@ function App() {
     fetchData();
   }, []);
 
-console.log(jobDetails)
   return (
     <Router>
       <Box sx={{minHeight:'100vh',width:'100%'}} >

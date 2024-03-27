@@ -34,7 +34,6 @@ export const useFilteredResultsContext = (): FilteredResultsContextValue => {
 
 export const FilteredResultsProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [filteredResults, setFilteredResults] = useState<Job[]>([]);
-    console.log(filteredResults)
 
     return (
         <FilteredResultsContext.Provider value={{ filteredResults, setFilteredResults }}>

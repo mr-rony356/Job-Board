@@ -48,7 +48,6 @@ export default function AccordionUsage({ jobDetails }: AccordionUsageProps) {
     };
     return (
         <div style={{
-            margin: '25px'
         }}>
                 <>
 
@@ -56,11 +55,13 @@ export default function AccordionUsage({ jobDetails }: AccordionUsageProps) {
                         fontFamily: 'inherit',
                         color: 'white',
                         fontSize: '50px',
-                        margin: '25px 0'
+                        margin: '25px 0',
+                        marginTop:'0'
+                        
                     }}>
                         {jobDetails.length > 0 ?
 
-                            `${jobDetails.length} Results`
+                            ``
                             :
                             'No Jobs Found '
 

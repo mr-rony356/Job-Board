@@ -86,10 +86,8 @@ const JobSearchForm = () => {
       State: formData.State.toString(), // Convert to string
     };
 
-    console.log('formData', updatedFormData);
     setJobFormData(updatedFormData);
     // Implement logic to show qualified opportunities
-    console.log('neeeed thiss', updatedFormData)
 
   };
   const renderOptions = (stepItem: Step) => {

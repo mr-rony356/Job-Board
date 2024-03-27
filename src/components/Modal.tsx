@@ -59,7 +59,6 @@ const CustomizedDialogs: React.FC<CustomizedDialogsProps> = ({
     setFormData(jobFormData);
   }, [jobFormData]);
 
-  console.log('jobs after Loads', jobFormData)
   const [steps] = useState<Step[]>(stepsData.steps);
 
   const handleChange = (value: string) => {

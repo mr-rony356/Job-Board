@@ -66,7 +66,6 @@ const FilterItems = ({ cleared }: Cleared) => {
                 practiceArea: [],
                 specialties: [],
             });
-            console.log('loadedddd')
         }
     }, [cleared]);
      const handleChange = (field: keyof FormData, value: string) => {
@@ -84,7 +83,6 @@ const FilterItems = ({ cleared }: Cleared) => {
                 State: value,
                 City: '', // Reset City when a new State is selected
             });
-            // console.log('data after click', formData); // Log the formData after it has been updated
         } else if (field === 'City') {
             updatedValue = [value];
             setFormData({
@@ -103,11 +101,6 @@ const FilterItems = ({ cleared }: Cleared) => {
         }
 
     };
-    console.log('jobs after Loads filter contetx', jobFormData)
-    console.log('jobs after Loads filter  local ', formData)
-    console.log('jobs after Loads filter', cleared)
-
-
     return (
         <Box sx={{
             display: 'flex',
