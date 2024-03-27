@@ -56,30 +56,32 @@ const JobSearch: React.FC<JobSearchProps> = ({  jobDetails, searchQuery, setSear
   
     const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
       setSearchQuery(event.target.value.toLowerCase());
-      if (event.target.value === '') {
-        setSearchQuery('');
-        setFilteredResults([]);
-      }
+      // if (event.target.value === '') {
+      //   setSearchQuery('');
+      // }
      
     };
   
     const handleSearchIconClick = () => {
-        const newFilteredResults = jobDetails.filter((job) =>
-          Object.values(job).some(
-            (value) => typeof value === 'string' && value.toLowerCase().includes(searchQuery)
-          )
-        );
-        if (searchQuery != ''){
-          setFilteredResults(newFilteredResults);
-          setSearchQuery(''); // Clear search input value
-          setJobFormData({
-            State: '',
-            City: '',
-            practiceArea: [],
-            specialties: [],
-          });
-  
-        }
+        const keywords = searchQuery.split(',').map(keyword => keyword.trim().toLowerCase());
+        let newFilteredResults = [...jobDetails];
+
+        keywords.forEach(keyword => {
+          newFilteredResults = newFilteredResults.filter(job =>
+            Object.values(job).some(
+              value => typeof value === 'string' && value.toLowerCase().includes(keyword)
+            )
+          );
+        });
+
+        setFilteredResults(newFilteredResults);
+        // setSearchQuery(''); // Clear search input value
+        setJobFormData({
+          State: '',
+          City: '',
+          practiceArea: [],
+          specialties: [],
+        });
       };
   
     return (

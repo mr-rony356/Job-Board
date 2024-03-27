@@ -40,18 +40,21 @@ const JobDetails: React.FC<JobDetailsProps> = ({ jobDetails }) => {
     return jobDetails.filter(job => {
       const cityMatch = !jobFormData.City || jobFormData.City === job.City;
       const stateMatch = !jobFormData.State || jobFormData.State === 'Remote' || jobFormData.State === job.State;
-
-      const practiceAreaMatch = !jobFormData.practiceArea || jobFormData.practiceArea.every(area => job.PracticeArea.includes(area.toUpperCase()));
-
+  
+      let practiceAreaMatch = true;
+      if (jobFormData.practiceArea && jobFormData.practiceArea.length > 0) {
+        practiceAreaMatch = jobFormData.practiceArea.some(area => job.PracticeArea.includes(area.toUpperCase()));
+      }
+  
       let specialtyMatch = true;
       if (jobFormData.specialties && jobFormData.specialties.length > 0) {
-        specialtyMatch = jobFormData.specialties.every(specialty => job.Cases.some(caseValue => caseValue.toUpperCase() === specialty.toUpperCase()));
+        specialtyMatch = jobFormData.specialties.some(specialty => job.Cases.some(caseValue => caseValue.toUpperCase() === specialty.toUpperCase()));
       }
-
+  
       return cityMatch && stateMatch && practiceAreaMatch && specialtyMatch;
     });
   }, [jobDetails, jobFormData]);
-
+  
   // Paginate filtered jobs
   const indexOfLastJob = currentPage * jobsPerPage;
   const indexOfFirstJob = indexOfLastJob - jobsPerPage;
