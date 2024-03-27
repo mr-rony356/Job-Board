@@ -107,8 +107,8 @@ const JobDetails: React.FC<JobDetailsProps> = ({ jobDetails }) => {
   // Paginate the displayed jobs
   const totalJobs = determineDisplayedJobs().length;
   const displayedJobs = determineDisplayedJobs().slice(indexOfFirstJob, indexOfLastJob);
-  const displayedRangeStart = indexOfFirstJob + 1;
-  const displayedRangeEnd = Math.min(indexOfLastJob, totalJobs);
+  // const displayedRangeStart = indexOfFirstJob + 1;
+  // const displayedRangeEnd = Math.min(indexOfLastJob, totalJobs);
   return (
     <JobDetailsWrapper>
       <Box
@@ -170,7 +170,7 @@ const JobDetails: React.FC<JobDetailsProps> = ({ jobDetails }) => {
         </Box>
 
         <Divider sx={{ borderColor: '#19ff85', width: '100%', borderWidth: '1.5px' }} />
-        <Box sx={{
+        {/* <Box sx={{
           display: 'flex',
           justifyContent: 'end',
           width: '100%',
@@ -180,7 +180,23 @@ const JobDetails: React.FC<JobDetailsProps> = ({ jobDetails }) => {
             Showing ({displayedRangeStart}-{displayedRangeEnd}) out  of {totalJobs} Results
           </Typography>
 
-        </Box>
+        </Box> */}
+        <Typography variant='h1' textAlign='center' sx={{
+                        fontFamily: 'inherit',
+                        color: 'white',
+                        fontSize: '40px',
+                        margin: '25px 0',
+                        
+                    }}>
+                      {
+                        totalJobs === 0?
+                        'No Job Found':
+                        `${totalJobs } Results`
+
+                      }
+                        
+                    </Typography>
+
 
         <AccordionUsage jobDetails={displayedJobs} />
         <Pagination

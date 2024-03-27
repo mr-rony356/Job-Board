@@ -47,27 +47,8 @@ export default function AccordionUsage({ jobDetails }: AccordionUsageProps) {
         setExpandedIndex(prevIndex => (prevIndex === index ? null : index));
     };
     return (
-        <div style={{
-        }}>
-                <>
+        <div>
 
-                    <Typography variant='h1' textAlign='center' sx={{
-                        fontFamily: 'inherit',
-                        color: 'white',
-                        fontSize: '50px',
-                        margin: '25px 0',
-                        marginTop:'0'
-                        
-                    }}>
-                        {jobDetails.length > 0 ?
-
-                            ``
-                            :
-                            'No Jobs Found '
-
-
-                        }
-                    </Typography>
 
                     {jobDetails.map((job, index) => (
                         <Box key={index}>
@@ -187,7 +168,6 @@ export default function AccordionUsage({ jobDetails }: AccordionUsageProps) {
                             <Divider sx={{ borderColor: 'white', }} />
                         </Box>
                     ))}
-                </>
         </div>
     );
 }

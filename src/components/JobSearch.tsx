@@ -55,7 +55,7 @@ const JobSearch: React.FC<JobSearchProps> = ({  jobDetails, searchQuery, setSear
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   
     const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
-      setSearchQuery(event.target.value.trim().toLowerCase());
+      setSearchQuery(event.target.value.toLowerCase());
       if (event.target.value === '') {
         setSearchQuery('');
         setFilteredResults([]);
