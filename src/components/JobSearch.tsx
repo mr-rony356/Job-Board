@@ -59,6 +59,7 @@ const JobSearch: React.FC<JobSearchProps> = ({  jobDetails, searchQuery, setSear
       // if (event.target.value === '') {
       //   setSearchQuery('');
       // }
+      handleSearchIconClick()
      
     };
   
@@ -83,6 +84,7 @@ const JobSearch: React.FC<JobSearchProps> = ({  jobDetails, searchQuery, setSear
           specialties: [],
         });
       };
+      
   
     return (
       <Box sx={{ position: 'relative' }}>

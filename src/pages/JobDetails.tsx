@@ -81,8 +81,11 @@ const JobDetails: React.FC<JobDetailsProps> = ({ jobDetails }) => {
   // Determine which jobs to display based on filters and search
   const determineDisplayedJobs = () => {
     // If filters are applied or search results exist, show the appropriate jobs
-     if (filteredResults.length > 0 && !jobFormData.State && !jobFormData.City ) {
+    if (filteredResults.length > 0 && !jobFormData.State && !jobFormData.City ) {
       return filteredResults;
+    } 
+    if ( !jobFormData.State && !jobFormData.City  && searchQuery) {
+      return [];
     } 
 
 

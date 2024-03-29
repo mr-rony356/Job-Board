@@ -105,12 +105,7 @@ export default function AccordionUsage({ jobDetails }: AccordionUsageProps) {
                                                 fontSize: isMobile ? '10px' : '14px'
                                             }}>
                                             {job.City} , {job.State}
-                                        </Typography>  <Typography variant='body1'
-                                            sx={{
-                                                fontSize: isMobile ? '10px' : '14px'
-                                            }}>
-                                            {job.Cases.map(jd => `${jd}${' ,'}`)}
-                                        </Typography>
+                                        </Typography> 
 
                                     </Box>
 
