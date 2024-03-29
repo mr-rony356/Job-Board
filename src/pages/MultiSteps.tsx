@@ -107,7 +107,7 @@ const JobSearchForm = () => {
                 variant="outlined"
                 className={formData[stepItem.name as FormDataKeys]?.includes(option) ? 'clicked' : ''}
                 style={{ color: 'white', borderColor: 'white', borderWidth: '2px', margin: '5px', cursor: 'pointer', fontWeight: '500', borderRadius: '0px', fontSize: isMobile ? '16px' : '18px', fontFamily: 'inherit', padding: '0 15px', textTransform: 'capitalize', letterSpacing: '3px' }}>
-                {option.toLocaleLowerCase()}
+                {option.toUpperCase()}
               </Button>
             ))
             : Object.entries(options).map(([key, value]) => {
