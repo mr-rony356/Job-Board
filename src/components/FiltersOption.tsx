@@ -66,6 +66,14 @@ const FilterItems = ({ cleared }: Cleared) => {
                 practiceArea: [],
                 specialties: [],
             });
+            setJobFormData({
+                State: '',
+                City: '',
+                practiceArea: [],
+                specialties: [],
+                // Add other fields as needed
+            });
+
         }
     }, [cleared]);
      const handleChange = (field: keyof FormData, value: string) => {

@@ -68,7 +68,7 @@ const JobApplicationModal: React.FC<Props> = ({ open, onClose, jobDetails }) => 
     const currentDate = new Date().toLocaleDateString('en-US', { timeZone: 'UTC' });
 
     try {
-      await emailjs.send('service_e8j9s9a', 'template_vk7obtx', {
+      await emailjs.send('service_h5aj7mu', 'template_gk4th94', {
         firstName: formData.firstName,
         lastName: formData.lastName,
         cellNumber: formData.cellNumber,
@@ -80,7 +80,7 @@ const JobApplicationModal: React.FC<Props> = ({ open, onClose, jobDetails }) => 
         practiceArea: formData.PracticeArea,
         specialties: formData.specialties.join(', '),
         date:currentDate
-      }, 'Yt0_FXKk8p02kuzC4');
+      }, 's9CcYy5vclsSxAZhY');
 
       console.log('Email sent successfully');
       onClose();

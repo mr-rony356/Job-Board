@@ -123,7 +123,11 @@ export default function AccordionUsage({ jobDetails }: AccordionUsageProps) {
                                 justifyContent: 'space-between',
                                 gap: '50px'
                             }}>
-                                <Typography textAlign='justify'>
+                                <Typography textAlign='justify' sx={{
+                                    fontSize:isMobile?'14px':'18px',
+                                    marginTop:'25px',
+                                    fontFamily:'inherit'
+                                }}>
                                     {job.JobDescription}
                                 </Typography>
                                 <Box sx={{
