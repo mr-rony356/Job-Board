@@ -105,7 +105,7 @@ export default function AccordionUsage({ jobDetails }: AccordionUsageProps) {
                                                 fontSize: isMobile ? '10px' : '14px'
                                             }}>
                                             {job.City} , {job.State}
-                                        </Typography> 
+                                        </Typography>
 
                                     </Box>
 
@@ -119,17 +119,25 @@ export default function AccordionUsage({ jobDetails }: AccordionUsageProps) {
                             <Box sx={{
                                 display: 'flex',
                                 flexDirection: 'column',
-                                alignItems: 'center',
+                                alignItems: 'start',
                                 justifyContent: 'space-between',
                                 gap: '50px'
-                            }}>
-                                <Typography textAlign='justify' sx={{
-                                    fontSize:isMobile?'14px':'18px',
-                                    marginTop:'25px',
-                                    fontFamily:'inherit'
-                                }}>
-                                    {job.JobDescription}
-                                </Typography>
+                            }}> 
+                            <Box>
+                            {job.JobDescription.split('. ').map((paragraph, index) => (
+                                    <Typography
+                                        key={index}
+                                        textAlign='justify' 
+                                        sx={{
+                                            fontSize: isMobile ? '14px' : '18px',
+                                            fontFamily: 'inherit',
+                                            marginTop:'10px'
+                                        }}
+                                        dangerouslySetInnerHTML={{ __html: paragraph +'.' }}
+                                    /> 
+                                ))}
+
+                            </Box>
                                 <Box sx={{
                                     display: 'flex',
                                     justifyContent: 'center',

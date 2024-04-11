@@ -108,8 +108,6 @@ const JobDetails: React.FC<JobDetailsProps> = ({ jobDetails }) => {
       return [];
     }
   };
-  
-  // Paginate the displayed jobs
   // Paginate the displayed jobs
   const totalJobs = determineDisplayedJobs().length;
   const displayedJobs = determineDisplayedJobs().slice(indexOfFirstJob, indexOfLastJob);
