@@ -138,7 +138,7 @@ const JobDetails: React.FC<JobDetailsProps> = ({ jobDetails }) => {
       <Box
         sx={{
           display: 'flex',
-          maxWidth: isMobile ? '100%' : '80%',
+          maxWidth: isMobile ? '98%' : '80%',
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'space-evenly',
