@@ -3,18 +3,17 @@ import { Box, Button, InputBase, useMediaQuery, useTheme } from '@mui/material';
 import { useJobContext } from '../context/FormDataContext';
 
 interface Job {
-    JobID: number;
-    FirmID: string;
-    Firm: string;
-    City: string;
-    State: string;
-    JobDescription: string;
-    JobPostTitle: string;
-    PracticeArea: string;
-    length: string;
-    Cases: string[];
-
-    // Add other job properties here
+  JobID: number;
+  FirmID: string;
+  Firm: string;
+  City: string;
+  State: string;
+  JobDescription: string;
+  JobPostTitle: string;
+  PracticeArea: string;
+  Cases: string[];
+  length: string;
+  DateUpdated: string;
 }
 
 interface FilteredResultsContextValue {

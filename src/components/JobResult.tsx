@@ -16,10 +16,9 @@ interface Job {
     JobDescription: string;
     JobPostTitle: string;
     PracticeArea: string;
-    length: string;
     Cases: string[];
-
-    // Field representing Job Post Description
+    length: string;
+    DateUpdated: string;
 }
 
 // Define the AccordionUsageProps interface
@@ -73,11 +72,14 @@ export default function AccordionUsage({ jobDetails }: AccordionUsageProps) {
                                     gap: '15px',
                                     alignItems: 'center',
                                 }} >
-                                    <Typography variant='h5' sx={{
-                                        fontSize: isMobile ? '25px' : '35px'
-                                    }} >
-                                        GT
-                                    </Typography>
+                                    <img
+                                        src="/logo.png" // Replace "/path/to/your/logo.png" with the actual path to your logo file
+                                        alt="GT Logo" // Add an alt attribute for accessibility
+                                        style={{
+                                            width: isMobile ? '40px' : '80px', // Adjust the width based on whether it's mobile or not
+                                            height: isMobile ? '40px' : '80px',
+                                        }}
+                                    />
                                 </Box>
                                 <Box>
                                     <Box>
@@ -96,7 +98,7 @@ export default function AccordionUsage({ jobDetails }: AccordionUsageProps) {
                                     }}>
                                         <Typography variant='body1'
                                             sx={{
-                                                fontSize: isMobile ? '12px' : '18px'
+                                                fontSize: isMobile ? '11px' : '14px'
                                             }}>
                                             {job.PracticeArea}
                                         </Typography>
@@ -119,25 +121,44 @@ export default function AccordionUsage({ jobDetails }: AccordionUsageProps) {
                             <Box sx={{
                                 display: 'flex',
                                 flexDirection: 'column',
-                                alignItems: 'start',
+                                alignItems: 'center',
                                 justifyContent: 'space-between',
-                                gap: '50px'
-                            }}> 
-                            <Box>
-                            {job.JobDescription.split('. ').map((paragraph, index) => (
-                                    <Typography
-                                        key={index}
-                                        textAlign='justify' 
-                                        sx={{
-                                            fontSize: isMobile ? '14px' : '18px',
-                                            fontFamily: 'inherit',
-                                            marginTop:'10px'
-                                        }}
-                                        dangerouslySetInnerHTML={{ __html: paragraph +'.' }}
-                                    /> 
-                                ))}
+                                gap: '20px'
+                            }}>
+                                <Box>
+                                    {job.JobDescription.split('. ').map((sentence, index, array) => {
+                                        // Trim whitespace from the beginning and end of the sentence
+                                        const paragraph = sentence.trim();
+                                        // Check if the paragraph has more than one word to consider it as a sentence
+                                        if (paragraph) {
+                                            // Add period only if there are more sentences in the array
+                                            const paragraphWithPeriod = index !== array.length - 1 ? `${paragraph}.` : paragraph;
+                                            return (
+                                                <Typography
+                                                    key={index}
+                                                    textAlign='justify'
+                                                    sx={{
+                                                        fontSize: isMobile ? '14px' : '18px',
+                                                        fontFamily: 'inherit',
+                                                        marginTop: '10px'
+                                                    }}
+                                                    dangerouslySetInnerHTML={{ __html: paragraphWithPeriod }}
+                                                />
+                                            );
+                                        }
+                                        // Return null if the paragraph is empty
+                                        return null;
+                                    })}
 
-                            </Box>
+                                    <Typography variant='body1' marginTop={4}>
+                                        <strong>Date posted : </strong>
+                                        <span style={{ fontWeight: '400',fontSize:'14px' }}>
+                                            {new Date(job.DateUpdated).toLocaleDateString()}
+                                        </span>
+                                    </Typography>
+
+
+                                </Box >
                                 <Box sx={{
                                     display: 'flex',
                                     justifyContent: 'center',
@@ -146,7 +167,7 @@ export default function AccordionUsage({ jobDetails }: AccordionUsageProps) {
                                     gap: '25px'
                                 }}>
                                     <Typography textAlign='center' sx={{
-                                        fontSize: '1rem'
+                                        fontSize: isMobile ? '14px' : '18px',
                                     }}>
                                         Interested in discussing this opportunity? Have Chris, Attorney Refruiter &amp; President @ Holtz & Bernard Call Me About This
                                     </Typography>

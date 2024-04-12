@@ -10,7 +10,7 @@ import { FilteredResultsProvider } from './components/JobSearch'; // Import Filt
 import ThankYou  from "./pages/ThankYou";
 import { useEffect, useState } from "react";
 
-interface Job {
+interface Jobses {
   JobID: number;
   FirmID: string;
   Firm: string;
@@ -21,10 +21,11 @@ interface Job {
   PracticeArea: string;
   Cases: string[];
   length: string;
+  DateUpdated: string;
 }
 
 function App() {
-  const [jobDetails, setJobDetails] = useState<Job[]>([]);
+  const [jobDetails, setJobDetails] = useState<Jobses[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {

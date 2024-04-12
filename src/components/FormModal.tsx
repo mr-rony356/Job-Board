@@ -13,6 +13,7 @@ interface JobDetail {
   JobPostTitle: string;
   PracticeArea: string;
   Cases: string[];
+  DateUpdated: string;
 
 }
 

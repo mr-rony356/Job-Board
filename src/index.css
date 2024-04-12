@@ -50,3 +50,6 @@ textarea::placeholder {
 {
   display: none !important;
 }
+.MuiPaginationItem-root{
+  color: white !important;
+}

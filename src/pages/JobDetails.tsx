@@ -19,6 +19,7 @@ interface Job {
   PracticeArea: string;
   Cases: string[];
   length: string;
+  DateUpdated: string;
 }
 
 interface JobDetailsProps {
@@ -40,21 +41,21 @@ const JobDetails: React.FC<JobDetailsProps> = ({ jobDetails }) => {
     return jobDetails.filter(job => {
       const cityMatch = !jobFormData.City || jobFormData.City === job.City;
       const stateMatch = !jobFormData.State || jobFormData.State === 'Remote' || jobFormData.State === job.State;
-  
+
       let practiceAreaMatch = true;
       if (jobFormData.practiceArea && jobFormData.practiceArea.length > 0) {
         practiceAreaMatch = jobFormData.practiceArea.some(area => job.PracticeArea.includes(area.toUpperCase()));
       }
-  
+
       let specialtyMatch = true;
       if (jobFormData.specialties && jobFormData.specialties.length > 0) {
         specialtyMatch = jobFormData.specialties.some(specialty => job.Cases.some(caseValue => caseValue.toUpperCase() === specialty.toUpperCase()));
       }
-  
+
       return cityMatch && stateMatch && practiceAreaMatch && specialtyMatch;
     });
   }, [jobDetails, jobFormData]);
-  
+
   // Paginate filtered jobs
   const indexOfLastJob = currentPage * jobsPerPage;
   const indexOfFirstJob = indexOfLastJob - jobsPerPage;
@@ -81,12 +82,12 @@ const JobDetails: React.FC<JobDetailsProps> = ({ jobDetails }) => {
   // Determine which jobs to display based on filters and search
   const determineDisplayedJobs = () => {
     // If filters are applied or search results exist, show the appropriate jobs
-    if (filteredResults.length > 0 && !jobFormData.State && !jobFormData.City ) {
+    if (filteredResults.length > 0 && !jobFormData.State && !jobFormData.City) {
       return filteredResults;
-    } 
-    if ( !jobFormData.State && !jobFormData.City  && searchQuery) {
+    }
+    if (!jobFormData.State && !jobFormData.City && searchQuery) {
       return [];
-    } 
+    }
 
 
     if (
@@ -97,12 +98,12 @@ const JobDetails: React.FC<JobDetailsProps> = ({ jobDetails }) => {
       (jobFormData.City && jobFormData.State && jobFormData.practiceArea?.length && jobFormData.specialties?.length)
     ) {
       return filteredJobDetails;
-    } 
+    }
     // If filtered results exist, show them
     // If no filters are applied and no search results exist, show all jobs
     else if (!jobFormData.State && !jobFormData.City && !searchQuery) {
       return jobDetails;
-    } 
+    }
     // If no jobs are found, return an empty array
     else {
       return [];
@@ -186,27 +187,25 @@ const JobDetails: React.FC<JobDetailsProps> = ({ jobDetails }) => {
 
         </Box> */}
         <Typography variant='h1' textAlign='center' sx={{
-                        fontFamily: 'inherit',
-                        color: 'white',
-                        fontSize: '40px',
-                        margin: '25px 0',
-                        
-                    }}>
-                      {
-                        totalJobs === 0?
-                        'No Job Found':
-                        `${totalJobs } Results`
+          fontFamily: 'inherit',
+          color: 'white',
+          fontSize: '40px',
+          margin: '25px 0',
 
-                      }
-                        
-                    </Typography>
+        }}>
+          {
+            totalJobs === 0 ?
+              'No Job Found' :
+              `${totalJobs} Results`
+
+          }
+
+        </Typography>
 
 
         <AccordionUsage jobDetails={displayedJobs} />
-        <Pagination
+        <Pagination color='primary'
           sx={{
-            background: 'white',
-            color: 'black',
             margin: '40px 0'
           }}
           count={Math.ceil(determineDisplayedJobs().length / jobsPerPage)}
