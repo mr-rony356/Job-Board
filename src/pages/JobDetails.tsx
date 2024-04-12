@@ -86,6 +86,7 @@ const JobDetails: React.FC<JobDetailsProps> = ({ jobDetails }) => {
   // Change page
   const handleChangePage = (event: React.ChangeEvent<unknown>, value: number) => {
     setCurrentPage(value);
+    console.log(event)
   };
 
   // Clear all filters
