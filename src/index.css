@@ -53,3 +53,7 @@ textarea::placeholder {
 .MuiPaginationItem-root{
   color: white !important;
 }
+.Mui-selected {
+  color: #000000 !important; 
+  background-color: #19ff85 !important;
+}

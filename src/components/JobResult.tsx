@@ -100,7 +100,7 @@ export default function AccordionUsage({ jobDetails }: AccordionUsageProps) {
                                             sx={{
                                                 fontSize: isMobile ? '11px' : '14px'
                                             }}>
-                                            {job.PracticeArea}
+                                            {job.Firm}
                                         </Typography>
                                         <Typography variant='body1'
                                             sx={{
@@ -152,7 +152,7 @@ export default function AccordionUsage({ jobDetails }: AccordionUsageProps) {
 
                                     <Typography variant='body1' marginTop={4}>
                                         <strong>Date posted : </strong>
-                                        <span style={{ fontWeight: '400',fontSize:'14px' }}>
+                                        <span style={{ fontWeight: '400', fontSize: '14px' }}>
                                             {new Date(job.DateUpdated).toLocaleDateString()}
                                         </span>
                                     </Typography>
@@ -169,8 +169,7 @@ export default function AccordionUsage({ jobDetails }: AccordionUsageProps) {
                                     <Typography textAlign='center' sx={{
                                         fontSize: isMobile ? '14px' : '18px',
                                     }}>
-                                        Interested in discussing this opportunity? Have Chris, Attorney Refruiter &amp; President @ Holtz & Bernard Call Me About This
-                                    </Typography>
+                                        Interested in discussing this opportunity? Have Chris Holtzhauer, Attorney Recruiter & President at Holtz & Bernard call me about this opportunity.                                    </Typography>
                                     <>
                                         <Button
                                             onClick={handleModalOpen}

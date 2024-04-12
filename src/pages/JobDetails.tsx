@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Box, Divider, Typography, useMediaQuery, useTheme } from '@mui/material';
+import { Box, Divider, Typography, useMediaQuery, useTheme, MenuItem, FormControl, Select } from '@mui/material';
 import JobDetailsWrapper from '../Wrapper/JobDetailsWrapper';
 import FilterItems from '../components/FiltersOption';
 import AccordionUsage from '../components/JobResult';
@@ -36,25 +36,48 @@ const JobDetails: React.FC<JobDetailsProps> = ({ jobDetails }) => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const jobsPerPage = 20;
   const [cleared, setCleared] = useState(false);
+  const [dateFilter, setDateFilter] = useState<string>('All'); // State to track selected date filter
+
   // Memoized filtered jobs
   const filteredJobDetails = useMemo(() => {
     return jobDetails.filter(job => {
+      // Filter based on city, state, practice area, and specialties
       const cityMatch = !jobFormData.City || jobFormData.City === job.City;
       const stateMatch = !jobFormData.State || jobFormData.State === 'Remote' || jobFormData.State === job.State;
-
       let practiceAreaMatch = true;
       if (jobFormData.practiceArea && jobFormData.practiceArea.length > 0) {
         practiceAreaMatch = jobFormData.practiceArea.some(area => job.PracticeArea.includes(area.toUpperCase()));
       }
-
       let specialtyMatch = true;
       if (jobFormData.specialties && jobFormData.specialties.length > 0) {
         specialtyMatch = jobFormData.specialties.some(specialty => job.Cases.some(caseValue => caseValue.toUpperCase() === specialty.toUpperCase()));
       }
-
-      return cityMatch && stateMatch && practiceAreaMatch && specialtyMatch;
+      // Filter based on date
+      const dateUpdated = new Date(job.DateUpdated);
+      const currentDate = new Date();
+      const oneWeekAgo = new Date(currentDate.getTime() - 7 * 24 * 60 * 60 * 1000);
+      const oneMonthAgo = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, currentDate.getDate());
+      const oneYearAgo = new Date(currentDate.getFullYear() - 1, currentDate.getMonth(), currentDate.getDate());
+      switch (dateFilter) {
+        case 'Today':
+          return cityMatch && stateMatch && practiceAreaMatch && specialtyMatch && dateUpdated.toDateString() === currentDate.toDateString();
+        case 'This week':
+          return cityMatch && stateMatch && practiceAreaMatch && specialtyMatch && dateUpdated >= oneWeekAgo;
+        case 'This month':
+          return cityMatch && stateMatch && practiceAreaMatch && specialtyMatch && dateUpdated >= oneMonthAgo;
+        case 'This year':
+          return cityMatch && stateMatch && practiceAreaMatch && specialtyMatch && dateUpdated.getFullYear() === currentDate.getFullYear();
+        case 'Last 6 months':
+          return cityMatch && stateMatch && practiceAreaMatch && specialtyMatch && dateUpdated >= new Date(currentDate.getFullYear(), currentDate.getMonth() - 6, currentDate.getDate());
+        case 'Last 12 months':
+          return cityMatch && stateMatch && practiceAreaMatch && specialtyMatch && dateUpdated >= oneYearAgo;
+        case 'All':
+          return cityMatch && stateMatch && practiceAreaMatch && specialtyMatch;
+        default:
+          return false;
+      }
     });
-  }, [jobDetails, jobFormData]);
+  }, [jobDetails, jobFormData, dateFilter]);
 
   // Paginate filtered jobs
   const indexOfLastJob = currentPage * jobsPerPage;
@@ -63,7 +86,6 @@ const JobDetails: React.FC<JobDetailsProps> = ({ jobDetails }) => {
   // Change page
   const handleChangePage = (event: React.ChangeEvent<unknown>, value: number) => {
     setCurrentPage(value);
-    console.log(event)
   };
 
   // Clear all filters
@@ -77,8 +99,10 @@ const JobDetails: React.FC<JobDetailsProps> = ({ jobDetails }) => {
     setSearchQuery('');
     setFilteredResults([]);
     setCurrentPage(1);
-    setCleared(true)
+    setCleared(true);
+    setDateFilter('All')
   };
+
   // Determine which jobs to display based on filters and search
   const determineDisplayedJobs = () => {
     // If filters are applied or search results exist, show the appropriate jobs
@@ -88,15 +112,9 @@ const JobDetails: React.FC<JobDetailsProps> = ({ jobDetails }) => {
     if (!jobFormData.State && !jobFormData.City && searchQuery) {
       return [];
     }
-
-
-    if (
-      filteredJobDetails.length > 0 ||
-      jobFormData.State ||
-      (jobFormData.City && jobFormData.State) ||
+    if (filteredJobDetails.length > 0 || jobFormData.State || (jobFormData.City && jobFormData.State) ||
       (jobFormData.City && jobFormData.State && jobFormData.practiceArea?.length) ||
-      (jobFormData.City && jobFormData.State && jobFormData.practiceArea?.length && jobFormData.specialties?.length)
-    ) {
+      (jobFormData.City && jobFormData.State && jobFormData.practiceArea?.length && jobFormData.specialties?.length) || dateFilter) {
       return filteredJobDetails;
     }
     // If filtered results exist, show them
@@ -109,11 +127,11 @@ const JobDetails: React.FC<JobDetailsProps> = ({ jobDetails }) => {
       return [];
     }
   };
+
   // Paginate the displayed jobs
   const totalJobs = determineDisplayedJobs().length;
   const displayedJobs = determineDisplayedJobs().slice(indexOfFirstJob, indexOfLastJob);
-  // const displayedRangeStart = indexOfFirstJob + 1;
-  // const displayedRangeEnd = Math.min(indexOfLastJob, totalJobs);
+
   return (
     <JobDetailsWrapper>
       <Box
@@ -139,9 +157,9 @@ const JobDetails: React.FC<JobDetailsProps> = ({ jobDetails }) => {
         </Box>
 
         <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
-
           <FilterItems cleared={cleared} />
         </Box>
+
         <Box
           sx={{
             margin: '20px 0',
@@ -175,17 +193,44 @@ const JobDetails: React.FC<JobDetailsProps> = ({ jobDetails }) => {
         </Box>
 
         <Divider sx={{ borderColor: '#19ff85', width: '100%', borderWidth: '1.5px' }} />
-        {/* <Box sx={{
-          display: 'flex',
-          justifyContent: 'end',
-          width: '100%',
-          alignItems:'center'
-        }}>
-          <Typography variant="body1" sx={{ marginTop:'35px', paddingRight:'15px', fontSize: isMobile?'12px':'18px', marginBottom:'0'}}>
-            Showing ({displayedRangeStart}-{displayedRangeEnd}) out  of {totalJobs} Results
-          </Typography>
 
-        </Box> */}
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'end',
+            alignItems: 'center',
+            marginTop: '20px',
+            width:'100%',
+            marginRight:'20px'
+          }}
+        >
+          {/* Date filter dropdown */}
+          <FormControl sx={{ minWidth: 120 ,background:'black'}}>
+            <Select
+              value={dateFilter}
+              onChange={(e) => setDateFilter(e.target.value as string)}
+              displayEmpty
+              sx={
+                {
+                  border:'1px solid white',
+                  color:'white'
+                }
+              }
+              defaultValue='Select Date Filterll'
+
+              inputProps={{ 'aria-label': 'Select Date Filter' }}
+            >
+              <MenuItem value="All">All</MenuItem>
+              <MenuItem value="Today">Today</MenuItem>
+              <MenuItem value="This week">This week</MenuItem>
+              <MenuItem value="This month">This month</MenuItem>
+              <MenuItem value="This year">This year</MenuItem>
+              <MenuItem value="Last 6 months">Last 6 months</MenuItem>
+              <MenuItem value="Last 12 months">Last 12 months</MenuItem>
+            </Select>
+          </FormControl>
+        </Box>
+
         <Typography variant='h1' textAlign='center' sx={{
           fontFamily: 'inherit',
           color: 'white',
@@ -197,11 +242,8 @@ const JobDetails: React.FC<JobDetailsProps> = ({ jobDetails }) => {
             totalJobs === 0 ?
               'No Job Found' :
               `${totalJobs} Results`
-
           }
-
         </Typography>
-
 
         <AccordionUsage jobDetails={displayedJobs} />
         <Pagination color='primary'
