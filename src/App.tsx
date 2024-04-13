@@ -3,14 +3,13 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { HomePage } from "./pages/HomePage";
 import { Box } from "@mui/material";
 import MultiSteps from './pages/MultiSteps'
-import Joblisting from "./components/Home";
 import { JobProvider } from "./context/FormDataContext";
 import JobDetails from "./pages/JobDetails";
 import { FilteredResultsProvider } from './components/JobSearch'; // Import FilteredResultsProvider
 import ThankYou  from "./pages/ThankYou";
 import { useEffect, useState } from "react";
 
-interface Jobses {
+interface Job {
   JobID: number;
   FirmID: string;
   Firm: string;
@@ -25,7 +24,7 @@ interface Jobses {
 }
 
 function App() {
-  const [jobDetails, setJobDetails] = useState<Jobses[]>([]);
+  const [jobDetails, setJobDetails] = useState<Job[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -51,7 +50,6 @@ function App() {
         <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/multi" element={<MultiSteps />} />
-        <Route path="/" element={<Joblisting />} />
         <Route path="/job-details" element={< JobDetails jobDetails={jobDetails} />} />
         <Route path="/thank-you" element={< ThankYou />} />
         </Routes>
