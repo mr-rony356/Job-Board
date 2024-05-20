@@ -91,7 +91,7 @@ const FilterItems = ({ cleared }: Cleared) => {
           display: "flex",
           gap: 2,
           margin: "20px 0",
-          flexWrap: "wrap", 
+          flexWrap: "wrap",
           justifyContent: "center",
         }}
       >
@@ -106,6 +106,7 @@ const FilterItems = ({ cleared }: Cleared) => {
             fontFamily: "Inter",
             fontWeight: "700",
             width: "auto",
+            padding: isMobile ? "" : "20px 10px",
             cursor: "pointer",
           }}
           label="Edit City & State"
@@ -121,6 +122,8 @@ const FilterItems = ({ cleared }: Cleared) => {
             borderRadius: "0px",
             fontSize: "14px",
             fontFamily: "Inter",
+            padding: isMobile ? "" : "20px 10px",
+
             fontWeight: "700",
             width: "auto",
             cursor: "pointer",
@@ -136,6 +139,8 @@ const FilterItems = ({ cleared }: Cleared) => {
             borderRadius: "0px",
             fontSize: "14px",
             fontFamily: "Inter",
+            padding: isMobile ? "" : "20px 10px",
+
             fontWeight: "700",
             width: "auto",
             cursor: "pointer",

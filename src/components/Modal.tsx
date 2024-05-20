@@ -176,8 +176,8 @@ const CustomizedDialogs: React.FC<CustomizedDialogsProps> = ({
                             : "white",
                           margin: "3px",
                           borderRadius: "0px",
-                          padding:isMobile?'': "3px 10px",
-                          fontSize: isMobile?"12px":"14px",
+                          padding:isMobile?'': "5px 10px",
+                          fontSize: isMobile?"12px":"16px",
                           fontFamily: "Times New Roman, Times, serif", // Set the font family to Times New Roman
                           fontWeight: "700",
                           width: "auto",
@@ -240,10 +240,11 @@ const CustomizedDialogs: React.FC<CustomizedDialogsProps> = ({
                               color: formData.City === city ? "black" : "white",
                               margin: "3px",
                               borderRadius: "0px",
-                              fontSize: isMobile?"12px":"14px",
+                              fontSize: isMobile?"12px":"16px",
                               fontFamily: "Times New Roman, Times, serif", // Set the font family to Times New Roman
                               fontWeight: "700",
                               width: "auto",
+                              padding:isMobile?'': "3px",
                               cursor: "pointer",
                               transition: "all 0.3s ease-in-out",
                               "&:hover": {
