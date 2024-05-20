@@ -96,7 +96,7 @@ const JobSearch: React.FC<JobSearchProps> = ({  jobDetails, searchQuery, setSear
           sx={{
             '& .MuiInputBase-input': { color: 'white' },
             color: 'white',
-            width:isMobile? '300px':'350px',
+            width:isMobile? '95vw':'350px',
             padding: '5px 10px', // Adjust padding as needed
             backgroundColor: '#000',
             outline: 'white',

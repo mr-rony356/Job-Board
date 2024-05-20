@@ -6,12 +6,9 @@
       "question": "What State are you looking in?",
       "options": [
         "Florida",
-        "D.C.",
+        "District of Columbia",
         "New York",
-        "Texas",
-        "Illinois",
-        "California",
-        "Remote"
+        "California"
       ]
     },
     {
@@ -29,7 +26,7 @@
           "Tallahassee",
           "Jacksonville"
         ],
-        "D.C.": [
+        "District of Columbia": [
           "Washington"
         ],
         "New York": [
@@ -39,16 +36,6 @@
           "San Francisco",
           "Los Angeles",
           "San Diego"
-        ],
-        "Texas": [
-          "Dallas",
-          "Houston",
-          "Austin"
-        ],
-        "Illinois": [
-          "Chicago",
-          "Aurora",
-          "Peoria"
         ]
       }
     },
@@ -71,7 +58,6 @@
         "Healthcare",
         "Immigration",
         "Information Technology",
-        "Insurance",
         "Intellection Property",
         "Labor & Employment",
         "Real Estate",
@@ -83,7 +69,7 @@
     {
       "label": "Specialties",
       "name": "specialties",
-      "question": "What types of cases do you mostly work on  ?",
+      "question": "Select the types of matters you mostly work on ",
       "options": [
         "MERGERS & ACQUISITIONS",
         "PRIVATE EQUITY",

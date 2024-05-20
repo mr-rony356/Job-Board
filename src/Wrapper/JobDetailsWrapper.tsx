@@ -13,6 +13,7 @@ const JobDetailsWrapper: React.FC<MainSectionWrapperProps> = ({ children }) => {
       backgroundSize: 'cover',
       minHeight:'93vh',
       display:'flex',
+      minWidth:'100%',
       justifyContent:'space-between',
       alignItems:'center',
       flexDirection:'column',

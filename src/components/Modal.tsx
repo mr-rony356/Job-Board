@@ -1,17 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import Button from '@mui/material/Button';
-import { styled } from '@mui/material/styles';
-import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
-import IconButton from '@mui/material/IconButton';
-import CloseIcon from '@mui/icons-material/Close';
-import { Box, Chip, useTheme, useMediaQuery } from '@mui/material';
-import stepsData from '../components/steps.json';
-import { useJobContext } from '../context/FormDataContext';
-import { produce } from 'immer';
-
+import React, { useEffect, useState } from "react";
+import Button from "@mui/material/Button";
+import { styled } from "@mui/material/styles";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogActions from "@mui/material/DialogActions";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
+import { Box, Chip, useTheme, useMediaQuery } from "@mui/material";
+import { useJobContext } from "../context/FormDataContext";
+import { produce } from "immer";
 
 interface Step {
   label: string;
@@ -25,18 +23,19 @@ interface FormData {
   City: string;
   practiceArea: string[];
   specialties: string[];
+  [key: string]: any; // Add this line
 }
-
 interface CustomizedDialogsProps {
   open: boolean;
   handleClose: () => void;
+  step: Step[];
 }
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
-  '& .MuiDialogContent-root': {
+  "& .MuiDialogContent-root": {
     padding: theme.spacing(1),
   },
-  '& .MuiDialogActions-root': {
+  "& .MuiDialogActions-root": {
     padding: theme.spacing(1),
   },
 }));
@@ -44,46 +43,59 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 const CustomizedDialogs: React.FC<CustomizedDialogsProps> = ({
   open,
   handleClose,
+  step,
 }) => {
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const { jobFormData, setJobFormData } = useJobContext();
   const [formData, setFormData] = useState<FormData>({
     State: jobFormData.State,
     City: jobFormData.City,
-    practiceArea: jobFormData['practiceArea'],
-    specialties: jobFormData['specialties'],
+    practiceArea: jobFormData["practiceArea"],
+    specialties: jobFormData["specialties"],
   });
+
   useEffect(() => {
     setFormData(jobFormData);
   }, [jobFormData]);
 
-  const [steps] = useState<Step[]>(stepsData.steps);
-
-  const handleChange = (value: string) => {
-    setFormData((prevData) => ({
-      ...prevData,
-      specialties: produce(prevData.specialties, (draftSpecialties) => {
-        if (draftSpecialties.includes(value)) {
-          // If the value exists, remove it
-          const index = draftSpecialties.indexOf(value);
-          draftSpecialties.splice(index, 1);
-        } else {
-          // If the value doesn't exist, add it
-          draftSpecialties.push(value);
-        }
-      }),
-    }));
+  const handleChange = (field: keyof FormData, value: string) => {
+    if (field === "specialties" || field === "practiceArea") {
+      setFormData((prevData) => ({
+        ...prevData,
+        [field]: produce(prevData[field], (draft) => {
+          if (draft.includes(value)) {
+            const index = draft.indexOf(value);
+            draft.splice(index, 1);
+          } else {
+            draft.push(value);
+          }
+        }),
+      }));
+    } else if (field === "State") {
+      setFormData({
+        ...formData,
+        State: value,
+        City: "", // Reset City when a new State is selected
+      });
+    } else if (field === "City") {
+      setFormData({
+        ...formData,
+        City: value,
+      });
+    }
   };
 
   const handleSave = () => {
-    // Update only the specialties property of jobFormData
     setJobFormData({
       ...jobFormData,
-      specialties: formData.specialties,
+      ...formData,
     });
     handleClose();
+  };
+  // Helper function to get all cities from all states
+  const getAllCities = (options: { [key: string]: string[] }) => {
+    return Object.values(options).flat();
   };
 
   return (
@@ -92,143 +104,185 @@ const CustomizedDialogs: React.FC<CustomizedDialogsProps> = ({
         onClose={handleClose}
         aria-labelledby="customized-dialog-title"
         open={open}
-        fullScreen={true}
-        sx={{
-          padding: isMobile ? '0' : ' 2% 8% ',
-        }}
+        className="modal-mobile"
+        fullScreen={isMobile}
+        fullWidth={true}
+        sx={{ padding: isMobile ? "0" : "2% 4%",display: "flex",flexDirection: "column",alignItems: "center",justifyContent: "center",}}  
       >
         <DialogTitle
-          textAlign='center'
+          textAlign="center"
           sx={{
             m: 0,
             pt: 4,
-            background: 'black',
-            color: 'white',
-            fontSize: isMobile ? '18px' : '25px',
+            background: "black",
+            color: "white",
+            fontSize: isMobile ? "18px" : "25px",
           }}
           id="customized-dialog-title"
         >
-          Select the types of cases you mostly work on
+          {step[0].question}
         </DialogTitle>
         <IconButton
           aria-label="close"
           onClick={handleClose}
           sx={{
-            position: 'absolute',
+            position: "absolute",
             right: 8,
             top: isMobile ? 0 : 8,
-            color: 'white',
+            color: "white",
           }}
         >
           <CloseIcon />
         </IconButton>
-        <DialogContent
-          sx={{
-            background: 'black',
-          }}
-          dividers
-        >
-          <Box
-            sx={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              flexDirection: 'column',
-              background: 'black',
-              backgroundSize: 'cover',
-            }}
-          >
+        <DialogContent sx={{ background: "black" }} dividers>
+          {step.map((stepData, index) => (
             <Box
+              key={index}
               sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginBottom: '10px',
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                marginBottom: "10px",
               }}
             >
               <Box
                 sx={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignContent: 'center',
-                  flexWrap: 'wrap',
-                  gap: '5px',
-                  marginLeft: '10px',
+                  display: "flex",
+                  justifyContent: "center",
+                  alignContent: "center",
+                  flexWrap: "wrap",
+                  gap: "5px",
+                  marginLeft: "10px",
                 }}
               >
-                {Array.isArray(steps[3].options) &&
-                  steps[3].options.map((option, optionIndex) => (
-                    <Chip
-                      key={optionIndex}
-                      label={option.toUpperCase()}
-                      onClick={() =>
-                        handleChange(option)
-                      }
-                      sx={{
-                        border: '1px solid white',
-                        backgroundColor: formData.specialties.includes(option)
-                          ? 'white'
-                          : 'black',
-                        color: formData.specialties.includes(option)
-                          ? 'black'
-                          : 'white',
-                        margin: '3px',
-                        borderRadius: '0px',
-                        fontSize: '12px',
-                        fontFamily: 'inherit',
-                        padding: '5px !important',
-                        '&:hover': {
-                          backgroundColor: formData.specialties.includes(option)
-                            ? 'white'
-                            : '#444',
-                          color: formData.specialties.includes(option)
-                            ? 'black'
-                            : 'white',
-                        },
-                        '&:focus': {
-                          backgroundColor: formData.specialties.includes(option)
-                            ? 'white'
-                            : '#666',
-                          color: formData.specialties.includes(option)
-                            ? 'black'
-                            : 'white',
-                          boxShadow: '0 0 0 2px #ffffff',
-                          outline: 'none',
-                        },
-                      }}
-                    />
-                  ))}
+                {Array.isArray(stepData.options) && stepData.name !== "City"
+                  ? stepData.options.map((option, optionIndex) => (
+                      <Chip
+                        key={optionIndex}
+                        label={option.toUpperCase()}
+                        onClick={() =>
+                          handleChange(stepData.name as keyof FormData, option)
+                        }
+                        sx={{
+                          border: "1px solid white",
+                          backgroundColor: formData[stepData.name].includes(
+                            option
+                          )
+                            ? "white"
+                            : "black",
+                          color: formData[stepData.name].includes(option)
+                            ? "black"
+                            : "white",
+                          margin: "3px",
+                          borderRadius: "0px",
+                          padding:isMobile?'': "3px 10px",
+                          fontSize: isMobile?"12px":"14px",
+                          fontFamily: "Times New Roman, Times, serif", // Set the font family to Times New Roman
+                          fontWeight: "700",
+                          width: "auto",
+                          transition: "all 0.3s ease-in-out",
+                          cursor: "pointer",
+                          "&:hover": {
+                            backgroundColor: "white",
+                            color: "black",
+                          },
+                        }}
+                      />
+                    ))
+                  : ""}
               </Box>
+              {stepData.name === "City" && (
+                <Box>
+                  <h5
+                    style={{
+                      color: "white",
+                      textAlign: "center",
+                      fontFamily: "Roboto, sans-serif",
+                      fontSize: isMobile?"18px":"24px",
+                    }}
+                  >
+                    What City are you looking in?{" "}
+                  </h5>
+
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignContent: "center",
+                      flexWrap: "wrap",
+                      gap: "5px",
+                      marginLeft: "10px",
+                      marginTop: "10px",
+                    }}
+                  >
+                    {typeof stepData.options === "object" &&
+                    !Array.isArray(stepData.options)
+                      ? (formData.State
+                          ? stepData.options[formData.State] || []
+                          : getAllCities(
+                              stepData.options as { [key: string]: string[] }
+                            )
+                        ).map((city, cityIndex) => (
+                          <Chip
+                            key={cityIndex}
+                            label={city.toUpperCase()}
+                            onClick={() =>
+                              handleChange(
+                                stepData.name as keyof FormData,
+                                city
+                              )
+                            }
+                            sx={{
+                              border: "1px solid white",
+                              backgroundColor:
+                                formData.City === city ? "white" : "black",
+                              color: formData.City === city ? "black" : "white",
+                              margin: "3px",
+                              borderRadius: "0px",
+                              fontSize: isMobile?"12px":"14px",
+                              fontFamily: "Times New Roman, Times, serif", // Set the font family to Times New Roman
+                              fontWeight: "700",
+                              width: "auto",
+                              cursor: "pointer",
+                              transition: "all 0.3s ease-in-out",
+                              "&:hover": {
+                                backgroundColor: "white",
+                                color: "black",
+                              },
+                            }}
+                          />
+                        ))
+                      : null}
+                  </Box>
+                </Box>
+              )}{" "}
             </Box>
-          </Box>
+          ))}
         </DialogContent>
         <DialogActions
-          color='success'
           sx={{
-            background: 'black',
-            color: 'white  ',
-            textAlign: 'center',
-            display: 'flex',
-            justifyContent: 'center',
+            background: "black",
+            display: "flex",
+            justifyContent: "center",
           }}
         >
           <Button
             autoFocus
             onClick={handleSave}
             sx={{
-              backgroundColor: '#19ff85',
-              color: 'black',
-              fontWeight: '900',
-              fontSize: isMobile ? '1.5rem' : '2rem',
-              padding: '5px 100px',
-              fontFamily: 'sans-serif',
-              width: isMobile ? '50vw' : '20vw',
-              lineHeight: '1.2',
-              '&:hover': {
-                backgroundColor: 'black',
-                color: '#19ff85',
-                border: '1px solid #19ff85',
+              backgroundColor: "#19ff85",
+              color: "black",
+              fontWeight: "900",
+              fontSize: isMobile ? "1.5rem" : "2rem",
+              padding: "5px 100px",
+              fontFamily: "sans-serif",
+              width: isMobile ? "50vw" : "20vw",
+              lineHeight: "1.5",
+              border: "1px solid #19ff85",
+              "&:hover": {
+                backgroundColor: "black",
+                color: "#19ff85",
               },
             }}
           >
@@ -237,6 +291,7 @@ const CustomizedDialogs: React.FC<CustomizedDialogsProps> = ({
         </DialogActions>
       </BootstrapDialog>
     </React.Fragment>
-  )
-}
+  );
+};
+
 export default CustomizedDialogs;
