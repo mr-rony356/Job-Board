@@ -282,7 +282,7 @@ const JobDetails: React.FC<JobDetailsProps> = ({ jobDetails }) => {
           }}
         >
           <JobSearchSection
-            jobDetails={jobDetails}
+            jobDetails={determineDisplayedJobs()}
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
             handleClearFilters={handleClearFilters}

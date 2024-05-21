@@ -11,14 +11,13 @@ const DateFilter: React.FC<DateFilterProps> = ({ dateFilter, setDateFilter }) =>
     <Box
       sx={{
         display: 'flex',
-        justifyContent: 'end',
+        justifyContent: 'center',
         alignItems: 'center',
         marginTop: '20px',
         width: '100%',
-        marginRight: '20px',
       }}
     >
-      <FormControl sx={{ minWidth: 100, background: 'black' }} size='small'>
+      <FormControl sx={{ minWidth: 80, background: 'black' }} size='small'>
         <Select
           value={dateFilter}
           onChange={(e) => setDateFilter(e.target.value as string)}
