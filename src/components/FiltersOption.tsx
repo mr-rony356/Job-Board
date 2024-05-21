@@ -4,7 +4,6 @@ import stepsData from "../components/steps.json";
 import { useMediaQuery, useTheme } from "@mui/material";
 import { useJobContext } from "../context/FormDataContext";
 import CustomizedDialogs from "./Modal";
-import DateFilter from "./job-details/DateFilter";
 interface Step {
   label: string;
   name: string;

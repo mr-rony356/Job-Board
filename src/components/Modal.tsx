@@ -9,7 +9,6 @@ import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import { Box, Chip, useTheme, useMediaQuery } from "@mui/material";
 import { useJobContext } from "../context/FormDataContext";
-import { produce } from "immer";
 
 interface Step {
   label: string;

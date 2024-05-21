@@ -7,7 +7,6 @@ import {
   useTheme,
 } from "@mui/material";
 import JobDetailsWrapper from "../Wrapper/JobDetailsWrapper";
-import FilterItems from "../components/FiltersOption";
 import AccordionUsage from "../components/job-details/JobResult";
 import Pagination from "@mui/material/Pagination";
 import { useJobContext } from "../context/FormDataContext";
