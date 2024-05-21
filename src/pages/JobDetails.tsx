@@ -42,13 +42,13 @@ const JobDetails: React.FC<JobDetailsProps> = ({ jobDetails }) => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const jobsPerPage = 20;
   const [cleared, setCleared] = useState(false);
-  const [dateFilter, setDateFilter] = useState<string>(""); // State to track selected date filter
+  const [dateFilter, setDateFilter] = useState<string>("intial"); // State to track selected date filter
 
   // Memoized filtered jobs
   const filteredJobDetails = useMemo(() => {
     return jobDetails.filter((job) => {
       // Filter based on city, state, practice area, and specialties
-      const cityMatch = !jobFormData.City || jobFormData.City === job.City;
+      const cityMatch = job.City.includes(jobFormData.City);
       const stateMatch = job.State.includes(jobFormData.State);
       let practiceAreaMatch = true;
       if (jobFormData.practiceArea && jobFormData.practiceArea.length > 0) {
@@ -134,9 +134,11 @@ const JobDetails: React.FC<JobDetailsProps> = ({ jobDetails }) => {
             specialtyMatch &&
             dateUpdated >= oneYearAgo
           );
-        case "All":
-          return cityMatch && stateMatch && practiceAreaMatch && specialtyMatch;
-        default:
+          case "All":
+            return cityMatch && stateMatch && practiceAreaMatch && specialtyMatch;
+          case "intial":
+              return cityMatch && stateMatch && practiceAreaMatch && specialtyMatch;
+              default:
           return false;
       }
     });
@@ -154,7 +156,6 @@ const JobDetails: React.FC<JobDetailsProps> = ({ jobDetails }) => {
     setCurrentPage(value);
     console.log(event);
   };
-  console.log(filteredJobDetails);
   // Clear all filters
   const handleClearFilters = () => {
     setJobFormData({
@@ -167,7 +168,7 @@ const JobDetails: React.FC<JobDetailsProps> = ({ jobDetails }) => {
     setFilteredResults([]);
     setCurrentPage(1);
     setCleared(true);
-    setDateFilter("All");
+    setDateFilter("intial");
   };
 
   // Determine which jobs to display based on filters and search
@@ -211,9 +212,11 @@ const JobDetails: React.FC<JobDetailsProps> = ({ jobDetails }) => {
             );
           case "Last 12 months":
             return dateUpdated >= oneYearAgo;
-          case "All":
-            return true;
-          default:
+            case "All":
+              return true;
+          case "intial":
+                return true;
+                default:
             return false;
         }
       });

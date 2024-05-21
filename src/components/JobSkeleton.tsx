@@ -7,7 +7,7 @@ const JobSkeleton = () => {
   return (
     <Box
       sx={{
-        width: isMobile?'100%':'80%',
+        width: isMobile?'96%':'80%',
         color: 'white',
         padding: isMobile ? '2%' : '2% 10%',
         display: 'flex',
@@ -19,7 +19,7 @@ const JobSkeleton = () => {
         sx={{
           textAlign: 'center',
           width: '200px',
-          padding: '5px',
+          padding: '3px',
           backgroundColor: 'rgba(255, 255, 255, 0.2)',
           color: 'white',
           borderRadius: '10px',

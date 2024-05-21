@@ -73,8 +73,8 @@ function App() {
                     borderWidth: "1.5px",
                   }}
                 />
-                <Box sx={{ display: "flex", justifyContent: "end", width: isMobile?"100%":"80%"}}>
-                  <DateFilter  dateFilter={""}  setDateFilter={() => {}} />
+                <Box sx={{ display: "flex", justifyContent: "end", width: isMobile?"95%":"80%"}}>
+                  <DateFilter  dateFilter={"intial"}  setDateFilter={() => {}} />
 
                 </Box>
 

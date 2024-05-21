@@ -29,7 +29,7 @@ const DateFilter: React.FC<DateFilterProps> = ({ dateFilter, setDateFilter }) =>
           }}
           inputProps={{ 'aria-label': 'Select Date Filter' }}
         >
-          <MenuItem value="">Filter by Date</MenuItem>
+          <MenuItem value="intial">Filter by Date</MenuItem>
           <MenuItem value="All">All</MenuItem>
           <MenuItem value="Today">Today</MenuItem>
           <MenuItem value="This week">This week</MenuItem>
