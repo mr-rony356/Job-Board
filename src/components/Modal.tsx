@@ -7,8 +7,9 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
-import { Box, Chip, useTheme, useMediaQuery } from "@mui/material";
+import { Box, useTheme, useMediaQuery } from "@mui/material";
 import { useJobContext } from "../context/FormDataContext";
+import ChipButton from "./ChipButton";
 
 interface Step {
   label: string;
@@ -157,36 +158,14 @@ const CustomizedDialogs: React.FC<CustomizedDialogsProps> = ({
               >
                 {Array.isArray(stepData.options) && stepData.name !== "City"
                   ? stepData.options.map((option, optionIndex) => (
-                      <Chip
+                      <ChipButton
                         key={optionIndex}
-                        label={option.toUpperCase()}
+                        label={option}
+                        isSelected={formData[stepData.name].includes(option)}
                         onClick={() =>
                           handleChange(stepData.name as keyof FormData, option)
                         }
-                        sx={{
-                          border: "1px solid white",
-                          backgroundColor: formData[stepData.name].includes(
-                            option
-                          )
-                            ? "white"
-                            : "black",
-                          color: formData[stepData.name].includes(option)
-                            ? "black"
-                            : "white",
-                          margin: "3px",
-                          borderRadius: "0px",
-                          padding: isMobile ? "" : "5px 10px",
-                          fontSize: isMobile ? "12px" : "16px",
-                          fontFamily: "Times New Roman, Times, serif", // Set the font family to Times New Roman
-                          fontWeight: "700",
-                          width: "auto",
-                          transition: "all 0.3s ease-in-out",
-                          cursor: "pointer",
-                          "&:hover": {
-                            backgroundColor: "white",
-                            color: "black",
-                          },
-                        }}
+                        isMobile={isMobile}
                       />
                     ))
                   : ""}
@@ -223,34 +202,17 @@ const CustomizedDialogs: React.FC<CustomizedDialogsProps> = ({
                               stepData.options as { [key: string]: string[] }
                             )
                         ).map((city, cityIndex) => (
-                          <Chip
+                          <ChipButton
                             key={cityIndex}
-                            label={city.toUpperCase()}
+                            label={city}
+                            isSelected={formData.City === city}
                             onClick={() =>
                               handleChange(
                                 stepData.name as keyof FormData,
                                 city
                               )
                             }
-                            sx={{
-                              border: "1px solid white",
-                              backgroundColor:
-                                formData.City === city ? "white" : "black",
-                              color: formData.City === city ? "black" : "white",
-                              margin: "3px",
-                              borderRadius: "0px",
-                              fontSize: isMobile ? "12px" : "16px",
-                              fontFamily: "Times New Roman, Times, serif", // Set the font family to Times New Roman
-                              fontWeight: "700",
-                              width: "auto",
-                              padding: isMobile ? "" : "3px",
-                              cursor: "pointer",
-                              transition: "all 0.3s ease-in-out",
-                              "&:hover": {
-                                backgroundColor: "white",
-                                color: "black",
-                              },
-                            }}
+                            isMobile={isMobile}
                           />
                         ))
                       : null}

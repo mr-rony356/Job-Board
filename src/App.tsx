@@ -58,6 +58,8 @@ function App() {
             {isLoading ? (
               <JobDetailsWrapper>
                 <JobFilters cleared={true} />
+                <DateFilter  dateFilter={"intial"}  setDateFilter={() => {}} />
+
                 <br />
                 <JobSearchSection 
                   jobDetails={jobDetails}
@@ -74,7 +76,6 @@ function App() {
                   }}
                 />
                 <Box sx={{ display: "flex", justifyContent: "end", width: isMobile?"95%":"80%"}}>
-                  <DateFilter  dateFilter={"intial"}  setDateFilter={() => {}} />
 
                 </Box>
 
