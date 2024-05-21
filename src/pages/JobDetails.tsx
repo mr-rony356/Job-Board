@@ -14,6 +14,7 @@ import { useJobContext } from "../context/FormDataContext";
 import { useFilteredResultsContext } from "../components/JobSearch";
 import JobSearchSection from "../components/job-details/JobSearch";
 import DateFilter from "../components/job-details/DateFilter";
+import JobFilters from "../components/job-details/JobFilters";
 
 interface Job {
   JobID: number;
@@ -134,11 +135,11 @@ const JobDetails: React.FC<JobDetailsProps> = ({ jobDetails }) => {
             specialtyMatch &&
             dateUpdated >= oneYearAgo
           );
-          case "All":
-            return cityMatch && stateMatch && practiceAreaMatch && specialtyMatch;
-          case "intial":
-              return cityMatch && stateMatch && practiceAreaMatch && specialtyMatch;
-              default:
+        case "All":
+          return cityMatch && stateMatch && practiceAreaMatch && specialtyMatch;
+        case "intial":
+          return cityMatch && stateMatch && practiceAreaMatch && specialtyMatch;
+        default:
           return false;
       }
     });
@@ -212,11 +213,11 @@ const JobDetails: React.FC<JobDetailsProps> = ({ jobDetails }) => {
             );
           case "Last 12 months":
             return dateUpdated >= oneYearAgo;
-            case "All":
-              return true;
+          case "All":
+            return true;
           case "intial":
-                return true;
-                default:
+            return true;
+          default:
             return false;
         }
       });
@@ -267,22 +268,9 @@ const JobDetails: React.FC<JobDetailsProps> = ({ jobDetails }) => {
           justifyContent: "space-evenly",
         }}
       >
-        <Box>
-          <Typography
-            variant="h1"
-            sx={{
-              textAlign: "center",
-              fontSize: "3rem",
-              fontFamily: "inherit",
-            }}
-          >
-            Search Filters
-          </Typography>
-        </Box>
+        <JobFilters cleared={cleared} />
+        <DateFilter dateFilter={dateFilter} setDateFilter={setDateFilter} />
 
-        <Box sx={{ display: "flex", flexWrap: "wrap" }}>
-          <FilterItems cleared={cleared} />
-        </Box>
 
         <Box
           sx={{
@@ -306,7 +294,6 @@ const JobDetails: React.FC<JobDetailsProps> = ({ jobDetails }) => {
           sx={{ borderColor: "#19ff85", width: "100%", borderWidth: "1.5px" }}
         />
 
-        <DateFilter dateFilter={dateFilter} setDateFilter={setDateFilter} />
 
         <Typography
           variant="h1"

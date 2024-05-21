@@ -4,6 +4,7 @@ import stepsData from "../components/steps.json";
 import { useMediaQuery, useTheme } from "@mui/material";
 import { useJobContext } from "../context/FormDataContext";
 import CustomizedDialogs from "./Modal";
+import DateFilter from "./job-details/DateFilter";
 interface Step {
   label: string;
   name: string;
@@ -97,8 +98,8 @@ const FilterItems = ({ cleared }: Cleared) => {
           onClick={() => handleClickOpen("cityState")}
           sx={{
             border: "1px solid white",
-            backgroundColor: "black",
             color: "white",
+            backgroundColor: "black",
             borderRadius: "0px",
             fontSize: "14px",
             fontFamily: "Inter",

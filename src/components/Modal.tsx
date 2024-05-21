@@ -63,14 +63,9 @@ const CustomizedDialogs: React.FC<CustomizedDialogsProps> = ({
     if (field === "specialties" || field === "practiceArea") {
       setFormData((prevData) => ({
         ...prevData,
-        [field]: produce(prevData[field], (draft) => {
-          if (draft.includes(value)) {
-            const index = draft.indexOf(value);
-            draft.splice(index, 1);
-          } else {
-            draft.push(value);
-          }
-        }),
+        [field]: prevData[field].includes(value)
+          ? prevData[field].filter((item) => item !== value)
+          : [...prevData[field], value],
       }));
     } else if (field === "State") {
       setFormData({
@@ -85,7 +80,6 @@ const CustomizedDialogs: React.FC<CustomizedDialogsProps> = ({
       });
     }
   };
-
   const handleSave = () => {
     setJobFormData({
       ...jobFormData,
@@ -107,7 +101,13 @@ const CustomizedDialogs: React.FC<CustomizedDialogsProps> = ({
         className="modal-mobile"
         fullScreen={isMobile}
         fullWidth={true}
-        sx={{ padding: isMobile ? "0" : "2% 4%",display: "flex",flexDirection: "column",alignItems: "center",justifyContent: "center",}}  
+        sx={{
+          padding: isMobile ? "0" : "2% 4%",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
       >
         <DialogTitle
           textAlign="center"
@@ -176,8 +176,8 @@ const CustomizedDialogs: React.FC<CustomizedDialogsProps> = ({
                             : "white",
                           margin: "3px",
                           borderRadius: "0px",
-                          padding:isMobile?'': "5px 10px",
-                          fontSize: isMobile?"12px":"16px",
+                          padding: isMobile ? "" : "5px 10px",
+                          fontSize: isMobile ? "12px" : "16px",
                           fontFamily: "Times New Roman, Times, serif", // Set the font family to Times New Roman
                           fontWeight: "700",
                           width: "auto",
@@ -199,7 +199,7 @@ const CustomizedDialogs: React.FC<CustomizedDialogsProps> = ({
                       color: "white",
                       textAlign: "center",
                       fontFamily: "Roboto, sans-serif",
-                      fontSize: isMobile?"18px":"24px",
+                      fontSize: isMobile ? "18px" : "24px",
                     }}
                   >
                     What City are you looking in?{" "}
@@ -240,11 +240,11 @@ const CustomizedDialogs: React.FC<CustomizedDialogsProps> = ({
                               color: formData.City === city ? "black" : "white",
                               margin: "3px",
                               borderRadius: "0px",
-                              fontSize: isMobile?"12px":"16px",
+                              fontSize: isMobile ? "12px" : "16px",
                               fontFamily: "Times New Roman, Times, serif", // Set the font family to Times New Roman
                               fontWeight: "700",
                               width: "auto",
-                              padding:isMobile?'': "3px",
+                              padding: isMobile ? "" : "3px",
                               cursor: "pointer",
                               transition: "all 0.3s ease-in-out",
                               "&:hover": {
