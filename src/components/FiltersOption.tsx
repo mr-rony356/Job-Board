@@ -82,8 +82,6 @@ const FilterItems = ({ cleared }: Cleared) => {
         justifyContent: "center",
         alignItems: "center",
         flexDirection: "column",
-        background: "radial-gradient(ellipse at center,#1c663f 0%,#000 60%)",
-        backgroundSize: "cover",
       }}
     >
       <Box

@@ -7,7 +7,7 @@ const JobSkeleton = () => {
   return (
     <Box
       sx={{
-        width: '100%',
+        width: isMobile?'100%':'80%',
         color: 'white',
         padding: isMobile ? '2%' : '2% 10%',
         display: 'flex',
@@ -23,8 +23,8 @@ const JobSkeleton = () => {
           backgroundColor: 'rgba(255, 255, 255, 0.2)',
           color: 'white',
           borderRadius: '10px',
-          marginTop: '25px',
-          marginBottom: '40px',
+          marginTop: '20px',
+          marginBottom:isMobile?'40px': '20px',
         }}
         >
             <Skeleton variant="text" height={30} sx={{ bgcolor: 'grey.900' }}  />
@@ -45,17 +45,18 @@ const JobSkeleton = () => {
             key={index}
             sx={{
               display: 'flex',
-              gap: 2,
+              gap: isMobile?4:7,
               backgroundColor: 'rgba(255, 255, 255, 0.2)',
               color: 'white',
-              padding: isMobile ? '2%' : '2% 10%',
+              padding: isMobile ? '2%' : '2% 3%',
               borderRadius: '10px',
               alignItems: 'center',
+              margin:isMobile?'1% 2%': '1% 1%',
             }}
           >
-            <Skeleton variant="rectangular" width={80} height={80} sx={{ bgcolor: 'grey.900' }} animation="wave" />
+            <Skeleton variant="rectangular" width={isMobile?40:80} height={isMobile?40:80}sx={{ bgcolor: 'grey.900' }} animation="wave" />
             <Box sx={{ flex: 1 }} >
-              <Skeleton width="50%" sx={{ bgcolor: 'grey.900' }} />
+              <Skeleton width="40%" sx={{ bgcolor: 'grey.900' }} animation="wave" />
               <Skeleton sx={{ bgcolor: 'grey.900' }} />
               <Skeleton width="70%" sx={{ bgcolor: 'grey.900' }} />
             </Box>

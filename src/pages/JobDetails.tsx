@@ -1,22 +1,19 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo } from "react";
 import {
   Box,
   Divider,
   Typography,
   useMediaQuery,
   useTheme,
-  MenuItem,
-  FormControl,
-  Select,
 } from "@mui/material";
 import JobDetailsWrapper from "../Wrapper/JobDetailsWrapper";
 import FilterItems from "../components/FiltersOption";
-import AccordionUsage from "../components/JobResult";
-import JobSearch from "../components/JobSearch";
+import AccordionUsage from "../components/job-details/JobResult";
 import Pagination from "@mui/material/Pagination";
 import { useJobContext } from "../context/FormDataContext";
-import { useFilteredResultsContext } from "../components/JobSearch"; // Import FilteredResultsProvider
-import JobSkeleton from "../components/JobSkeleton";
+import { useFilteredResultsContext } from "../components/JobSearch";
+import JobSearchSection from "../components/job-details/JobSearch";
+import DateFilter from "../components/job-details/DateFilter";
 
 interface Job {
   JobID: number;
@@ -39,7 +36,6 @@ interface JobDetailsProps {
 const JobDetails: React.FC<JobDetailsProps> = ({ jobDetails }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const [isFirstLoad, setIsFirstLoad] = useState(true);
   const { jobFormData, setJobFormData } = useJobContext();
   const { filteredResults, setFilteredResults } = useFilteredResultsContext();
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -47,12 +43,6 @@ const JobDetails: React.FC<JobDetailsProps> = ({ jobDetails }) => {
   const jobsPerPage = 20;
   const [cleared, setCleared] = useState(false);
   const [dateFilter, setDateFilter] = useState<string>(""); // State to track selected date filter
-  useEffect(() => {
-    // Set isFirstLoad to false after the initial render
-      setTimeout(() => {
-        setIsFirstLoad(false);
-      }, 6000);
-  }, [isFirstLoad]);
 
   // Memoized filtered jobs
   const filteredJobDetails = useMemo(() => {
@@ -301,111 +291,42 @@ const JobDetails: React.FC<JobDetailsProps> = ({ jobDetails }) => {
             flexDirection: isMobile ? "column" : "row",
           }}
         >
-          <JobSearch
+          <JobSearchSection
             jobDetails={jobDetails}
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
+            handleClearFilters={handleClearFilters}
+            isMobile={isMobile}
           />
-          <Box>
-            <Typography
-              padding={1}
-              fontSize={12}
-              sx={{
-                background: "black",
-                border: "1px solid white",
-                cursor: "pointer",
-                padding: "5px",
-                "&:hover": {
-                  background: "#11b55e",
-                  color: "black",
-                },
-              }}
-              onClick={handleClearFilters}
-            >
-              Clear All Filters
-            </Typography>
-          </Box>
         </Box>
-
         <Divider
           sx={{ borderColor: "#19ff85", width: "100%", borderWidth: "1.5px" }}
         />
 
-        <Box
+        <DateFilter dateFilter={dateFilter} setDateFilter={setDateFilter} />
+
+        <Typography
+          variant="h1"
+          textAlign="center"
           sx={{
-            display: "flex",
-            justifyContent: "end",
-            alignItems: "center",
-            marginTop: "20px",
-            width: "100%",
-            marginRight: "20px",
+            fontFamily: "inherit",
+            color: "white",
+            fontSize: "40px",
+            margin: "25px 0",
           }}
         >
-          {/* Date filter dropdown */}
-          <FormControl sx={{ minWidth: 120, background: "black" }}>
-            <Select
-              value={dateFilter}
-              onChange={(e) => setDateFilter(e.target.value as string)}
-              displayEmpty
-              sx={{
-                border: "1px solid white",
-                color: "white",
-              }}
-              inputProps={{ "aria-label": "Select Date Filter" }}
-            >
-              <MenuItem value="">Filter by Date</MenuItem>
-              <MenuItem value="All">All</MenuItem>
-              <MenuItem value="Today">Today</MenuItem>
-              <MenuItem value="This week">This week</MenuItem>
-              <MenuItem value="This month">This month</MenuItem>
-              <MenuItem value="This year">This year</MenuItem>
-              <MenuItem value="Last 6 months">Last 6 months</MenuItem>
-              <MenuItem value="Last 12 months">Last 12 months</MenuItem>
-            </Select>
-          </FormControl>{" "}
-        </Box>
-
-        {displayedJobs.length > 0  ? (
-          <>
-            <Typography
-              variant="h1"
-              textAlign="center"
-              sx={{
-                fontFamily: "inherit",
-                color: "white",
-                fontSize: "40px",
-                margin: "25px 0",
-              }}
-            >
-              {totalJobs === 0 ? "No Job Found" : `${totalJobs} Results`}
-            </Typography>
-            <AccordionUsage jobDetails={displayedJobs} />
-            <Pagination
-              color="primary"
-              sx={{
-                margin: "40px 0",
-              }}
-              count={Math.ceil(determineDisplayedJobs().length / jobsPerPage)}
-              page={currentPage}
-              onChange={handleChangePage}
-            />
-          </>
-        ) :  isFirstLoad?(
-          <JobSkeleton />
-        ):(
-          <Typography
-            variant="h1"
-            textAlign="center"
-            sx={{
-              fontFamily: "inherit",
-              color: "white",
-              fontSize: "40px",
-              margin: "25px 0",
-            }}
-          >
-            No Job Found
-          </Typography>
-        )}
+          {totalJobs === 0 ? "No Job Found" : `${totalJobs} Results`}
+        </Typography>
+        <AccordionUsage jobDetails={displayedJobs} />
+        <Pagination
+          color="primary"
+          sx={{
+            margin: "40px 0",
+          }}
+          count={Math.ceil(determineDisplayedJobs().length / jobsPerPage)}
+          page={currentPage}
+          onChange={handleChangePage}
+        />
       </Box>
     </JobDetailsWrapper>
   );
