@@ -150,17 +150,16 @@ const CustomModal: React.FC<Props> = ({ open, onClose, jobDetails }) => {
             color: "black",
             borderRadius: "8px",
             padding: isMobile ? "20px" : "20px",
-            margin: "50px 0",
             display: "flex",
             minHeight: isMobile ? "80vh" : "50vh",
             justifyContent: "center",
-            alignItems: "center",
+            alignItems:"center",
             position: "absolute",
             top: "50%",
             left: "50%",
             zIndex: 999,
             transform: "translate(-50%, -50%)",
-            width: isMobile ? "90%" : "70%",
+            width: isMobile ? "90%" : "60%",
           }}
         >
           <IconButton
@@ -185,15 +184,13 @@ const CustomModal: React.FC<Props> = ({ open, onClose, jobDetails }) => {
               flexDirection: "column",
               gap: "10px",
               width: "100%",
+              paddingTop:isMobile?"0": "40px",
             }}
           >
             <TextField
               id="firstName"
               name="firstName"
               label="First Name"
-              sx={{
-                marginTop: "50px",
-              }}
               variant="outlined"
               fullWidth
               margin="normal"
@@ -207,7 +204,57 @@ const CustomModal: React.FC<Props> = ({ open, onClose, jobDetails }) => {
               onChange={handleInputChange}
               required
             />
-            {/* Other input fields */}
+            <TextField
+              id="lastName"
+              name="lastName"
+              label="Last Name"
+              variant="outlined"
+              fullWidth
+              margin="normal"
+              InputLabelProps={{
+                style: { color: "black" },
+              }}
+              InputProps={{
+                style: { color: "black", padding: "10px 0" },
+              }}
+              value={formData.lastName}
+              onChange={handleInputChange}
+              required
+            />
+            <TextField
+              id="cellNumber"
+              name="cellNumber"
+              label="Cell Number"
+              variant="outlined"
+              fullWidth
+              margin="normal"
+              InputLabelProps={{
+                style: { color: "black" },
+              }}
+              InputProps={{
+                style: { color: "black", padding: "10px 0" },
+              }}
+              value={formData.cellNumber}
+              onChange={handleInputChange}
+              required
+            />
+            <TextField
+              id="personalEmail"
+              name="personalEmail"
+              label="Personal Email"
+              variant="outlined"
+              fullWidth
+              margin="normal"
+              InputLabelProps={{
+                style: { color: "black" },
+              }}
+              InputProps={{
+                style: { color: "black", padding: "10px 0" },
+              }}
+              value={formData.personalEmail}
+              onChange={handleInputChange}
+              required
+            />{" "}
             <Button
               type="submit"
               variant="contained"
@@ -218,7 +265,8 @@ const CustomModal: React.FC<Props> = ({ open, onClose, jobDetails }) => {
                 background: "black",
                 width: isMobile ? "200px" : "300px",
                 fontSize: "20px",
-                padding: "15px 0",
+                padding: "10px 0",
+                marginTop: isMobile? "50px" : "20px",
                 "&:hover": {
                   backgroundColor: "#19ff85",
                   color: "black",
