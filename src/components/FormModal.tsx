@@ -1,7 +1,40 @@
-import React, { useState, useEffect } from "react";
-import { Dialog, TextField, Button, Box } from "@mui/material";
+import React, { useEffect, useState } from "react";
 import emailjs from "emailjs-com";
+import {
+  TextField,
+  Button,
+  Box,
+  Modal,
+  IconButton,
+  Typography,
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 import { useMediaQuery, useTheme } from "@mui/material";
+import JobDetailsWrapper from "../Wrapper/JobDetailsWrapper";
+const styles = {
+  container: {
+    backgroundColor: "#000",
+    borderRadius: "10px",
+    padding: "20px",
+    textAlign: "center",
+    width: "80%",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    minHeight: "100vh",
+    flexDirection: "column",
+  },
+  title: {
+    color: "#fff",
+    fontSize: "30px",
+    fontWeight: "bold",
+    marginBottom: "10px",
+  },
+  description: {
+    color: "#fff",
+    fontSize: "16px",
+  },
+};
 
 interface JobDetail {
   JobID: number;
@@ -22,11 +55,7 @@ interface Props {
   jobDetails: JobDetail[];
 }
 
-const JobApplicationModal: React.FC<Props> = ({
-  open,
-  onClose,
-  jobDetails,
-}) => {
+const CustomModal: React.FC<Props> = ({ open, onClose, jobDetails }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
@@ -42,6 +71,9 @@ const JobApplicationModal: React.FC<Props> = ({
     JobPostTitle: "",
     specialties: [] as string[],
   });
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showThankYouModal, setShowThankYouModal] = useState(false);
 
   useEffect(() => {
     // Set City and State from the first job detail (assuming it's available)
@@ -73,9 +105,11 @@ const JobApplicationModal: React.FC<Props> = ({
     });
 
     try {
+      setIsSubmitting(true);
+
       await emailjs.send(
-        "service_h5aj7mu",
-        "template_gk4th94",
+        "service_e8j9s9a",
+        "template_vk7obtx",
         {
           firstName: formData.firstName,
           lastName: formData.lastName,
@@ -89,148 +123,152 @@ const JobApplicationModal: React.FC<Props> = ({
           specialties: formData.specialties.join(", "),
           date: currentDate,
         },
-        "s9CcYy5vclsSxAZhY"
+        "Yt0_FXKk8p02kuzC4"
       );
 
       console.log("Email sent successfully");
+      setIsSubmitting(false);
       onClose();
-      // Redirect to /thankyou page
-      window.location.href = "/thank-you";
+      setShowThankYouModal(true);
     } catch (error) {
-      // Handle error (e.g., show an error message)
+      setIsSubmitting(false);
       console.error("Error sending email:", error);
     }
   };
 
   return (
-    <Dialog
-      fullWidth={true}
-      open={open}
-      onClose={onClose}
-      aria-labelledby="job-application-dialog"
-      aria-describedby="job-application-form"
-      maxWidth={isMobile ? "xl" : "sm"}
-      PaperProps={{
-        sx: {
-          bgcolor: "white",
-        },
-      }}
-    >
-      <Box
-        sx={{
-          bgcolor: "white",
-          color: "black",
-          borderRadius: "8px",
-          padding: isMobile ? "20px" : "20px",
-          margin: "50px 0",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
+    <>
+      <Modal
+        open={open}
+        onClose={onClose}
+        aria-labelledby="job-application-modal"
+        aria-describedby="job-application-form"
       >
-        <form
-          onSubmit={handleSubmit}
-          style={{
+        <Box
+          sx={{
+            bgcolor: "white",
+            color: "black",
+            borderRadius: "8px",
+            padding: isMobile ? "20px" : "20px",
+            margin: "50px 0",
             display: "flex",
+            minHeight: isMobile ? "80vh" : "50vh",
             justifyContent: "center",
             alignItems: "center",
-            flexDirection: "column",
-            gap: "10px",
-            width: isMobile ? "100%" : "70%",
-            position: "relative",
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            zIndex: 999,
+            transform: "translate(-50%, -50%)",
+            width: isMobile ? "90%" : "70%",
           }}
         >
-          <TextField
-            id="firstName"
-            name="firstName"
-            label="First Name"
-            variant="outlined"
-            fullWidth
-            margin="normal"
-            InputLabelProps={{
-              style: { color: "black" },
-            }}
-            InputProps={{
-              style: { color: "black", padding: "10px 0" },
-            }}
-            value={formData.firstName}
-            onChange={handleInputChange}
-            required
-          />
-          <TextField
-            id="lastName"
-            name="lastName"
-            label="Last Name"
-            variant="outlined"
-            fullWidth
-            margin="normal"
-            InputLabelProps={{
-              style: { color: "black" },
-            }}
-            InputProps={{
-              style: { color: "black", padding: "10px 0" },
-            }}
-            value={formData.lastName}
-            onChange={handleInputChange}
-            required
-          />
-          <TextField
-            id="cellNumber"
-            name="cellNumber"
-            label="Cell Number"
-            variant="outlined"
-            fullWidth
-            margin="normal"
-            InputLabelProps={{
-              style: { color: "black" },
-            }}
-            InputProps={{
-              style: { color: "black", padding: "10px 0" },
-            }}
-            value={formData.cellNumber}
-            onChange={handleInputChange}
-            required
-          />
-          <TextField
-            id="personalEmail"
-            name="personalEmail"
-            label="Personal Email"
-            variant="outlined"
-            fullWidth
-            margin="normal"
-            InputLabelProps={{
-              style: { color: "black" },
-            }}
-            InputProps={{
-              style: { color: "black", padding: "10px 0" },
-            }}
-            value={formData.personalEmail}
-            onChange={handleInputChange}
-            required
-          />
-          {/* Other form fields */}
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
+          <IconButton
+            aria-label="close"
+            size="large"
+            onClick={onClose}
             sx={{
-              margin: "25px 0",
-              background: "black",
-              width: isMobile ? "200px" : "300px",
-              fontSize: "20px",
-              padding: "15px 0",
-              "&:hover": {
-                backgroundColor: "#19ff85",
-                color: "black",
-              },
+              position: "absolute",
+              top: 8,
+              right: 8,
+              color: "black",
             }}
           >
-            Submit
-          </Button>
-        </form>
-      </Box>
-    </Dialog>
+            <CloseIcon />
+          </IconButton>
+          <form
+            onSubmit={handleSubmit}
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              flexDirection: "column",
+              gap: "10px",
+              width: "100%",
+            }}
+          >
+            <TextField
+              id="firstName"
+              name="firstName"
+              label="First Name"
+              sx={{
+                marginTop: "50px",
+              }}
+              variant="outlined"
+              fullWidth
+              margin="normal"
+              InputLabelProps={{
+                style: { color: "black" },
+              }}
+              InputProps={{
+                style: { color: "black", padding: "10px 0" },
+              }}
+              value={formData.firstName}
+              onChange={handleInputChange}
+              required
+            />
+            {/* Other input fields */}
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              disabled={isSubmitting}
+              sx={{
+                margin: "25px 0",
+                background: "black",
+                width: isMobile ? "200px" : "300px",
+                fontSize: "20px",
+                padding: "15px 0",
+                "&:hover": {
+                  backgroundColor: "#19ff85",
+                  color: "black",
+                },
+              }}
+            >
+              {isSubmitting ? "Submitting..." : "Submit"}
+            </Button>
+          </form>
+        </Box>
+      </Modal>
+
+      {showThankYouModal && (
+        <Modal
+          open={showThankYouModal}
+          onClose={() => setShowThankYouModal(false)}
+          aria-labelledby="thank-you-modal"
+          aria-describedby="thank-you-message"
+        >
+          <JobDetailsWrapper>
+            <Box sx={styles.container}>
+              <Typography variant="h2" style={styles.title}>
+                Thank You for your submission
+              </Typography>
+              <Typography style={styles.description}>
+                {" "}
+                An attorney placement professional will reach out to you shortly
+              </Typography>
+              <Button
+                variant="contained"
+                color="primary"
+                sx={{
+                  marginTop: "20px",
+                  background: "white",
+                  color: "black",
+                  "&:hover": {
+                    backgroundColor: "#19ff85",
+                    color: "black",
+                  },
+                }}
+                onClick={() => setShowThankYouModal(false)}
+              >
+                Search Jobs
+              </Button>
+            </Box>
+          </JobDetailsWrapper>
+        </Modal>
+      )}
+    </>
   );
 };
 
-export default JobApplicationModal;
+export default CustomModal;
