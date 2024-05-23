@@ -1,13 +1,6 @@
 import React, { useEffect, useState } from "react";
 import emailjs from "emailjs-com";
-import {
-  TextField,
-  Button,
-  Box,
-  Modal,
-  IconButton,
-  Typography,
-} from "@mui/material";
+import { TextField, Button, Box, IconButton, Typography } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { useMediaQuery, useTheme } from "@mui/material";
 import JobDetailsWrapper from "../Wrapper/JobDetailsWrapper";
@@ -17,11 +10,11 @@ const styles = {
     borderRadius: "10px",
     padding: "20px",
     textAlign: "center",
-    width: "80%",
+    width: "90%",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    minHeight: "100vh",
+    minHeight: "90vh",
     flexDirection: "column",
   },
   title: {
@@ -138,153 +131,172 @@ const CustomModal: React.FC<Props> = ({ open, onClose, jobDetails }) => {
 
   return (
     <>
-      <Modal
-        open={open}
-        onClose={onClose}
-        aria-labelledby="job-application-modal"
-        aria-describedby="job-application-form"
-      >
-        <Box
-          sx={{
-            bgcolor: "white",
-            color: "black",
-            borderRadius: "8px",
-            padding: isMobile ? "20px" : "20px",
+      {open && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            backgroundColor: "rgba(0, 0, 0, 0.9)",
             display: "flex",
-            minHeight: isMobile ? "80vh" : "50vh",
             justifyContent: "center",
-            alignItems:"center",
-            position: "absolute",
-            top: "50%",
-            left: "50%",
+            alignItems: "center",
             zIndex: 999,
-            transform: "translate(-50%, -50%)",
-            width: isMobile ? "90%" : "60%",
           }}
         >
-          <IconButton
-            aria-label="close"
-            size="large"
-            onClick={onClose}
+          <Box
             sx={{
-              position: "absolute",
-              top: 8,
-              right: 8,
+              bgcolor: "white",
               color: "black",
-            }}
-          >
-            <CloseIcon />
-          </IconButton>
-          <form
-            onSubmit={handleSubmit}
-            style={{
+              borderRadius: "8px",
+              padding: isMobile ? "40px" : "40px",
               display: "flex",
+              minHeight: isMobile ? "80vh" : "50vh",
               justifyContent: "center",
               alignItems: "center",
-              flexDirection: "column",
-              gap: "10px",
-              width: "100%",
-              paddingTop:isMobile?"0": "40px",
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              zIndex: 9999,
+
+              transform: "translate(-50%, -50%)",
+              width: isMobile ? "90%" : "500px",
             }}
           >
-            <TextField
-              id="firstName"
-              name="firstName"
-              label="First Name"
-              variant="outlined"
-              fullWidth
-              margin="normal"
-              InputLabelProps={{
-                style: { color: "black" },
-              }}
-              InputProps={{
-                style: { color: "black", padding: "10px 0" },
-              }}
-              value={formData.firstName}
-              onChange={handleInputChange}
-              required
-            />
-            <TextField
-              id="lastName"
-              name="lastName"
-              label="Last Name"
-              variant="outlined"
-              fullWidth
-              margin="normal"
-              InputLabelProps={{
-                style: { color: "black" },
-              }}
-              InputProps={{
-                style: { color: "black", padding: "10px 0" },
-              }}
-              value={formData.lastName}
-              onChange={handleInputChange}
-              required
-            />
-            <TextField
-              id="cellNumber"
-              name="cellNumber"
-              label="Cell Number"
-              variant="outlined"
-              fullWidth
-              margin="normal"
-              InputLabelProps={{
-                style: { color: "black" },
-              }}
-              InputProps={{
-                style: { color: "black", padding: "10px 0" },
-              }}
-              value={formData.cellNumber}
-              onChange={handleInputChange}
-              required
-            />
-            <TextField
-              id="personalEmail"
-              name="personalEmail"
-              label="Personal Email"
-              variant="outlined"
-              fullWidth
-              margin="normal"
-              InputLabelProps={{
-                style: { color: "black" },
-              }}
-              InputProps={{
-                style: { color: "black", padding: "10px 0" },
-              }}
-              value={formData.personalEmail}
-              onChange={handleInputChange}
-              required
-            />{" "}
-            <Button
-              type="submit"
-              variant="contained"
-              color="primary"
-              disabled={isSubmitting}
+            <IconButton
+              aria-label="close"
+              size="large"
+              onClick={onClose}
               sx={{
-                margin: "25px 0",
-                background: "black",
-                width: isMobile ? "200px" : "300px",
-                fontSize: "20px",
-                padding: "10px 0",
-                marginTop: isMobile? "50px" : "20px",
-                "&:hover": {
-                  backgroundColor: "#19ff85",
-                  color: "black",
-                },
+                position: "absolute",
+                top: 8,
+                right: 16,
+                color: "black",
               }}
             >
-              {isSubmitting ? "Submitting..." : "Submit"}
-            </Button>
-          </form>
-        </Box>
-      </Modal>
+              <CloseIcon />
+            </IconButton>
+            <form
+              onSubmit={handleSubmit}
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                flexDirection: "column",
+                gap: "10px",
+                width: "100%",
+                paddingTop: isMobile ? "0" : "40px",
+              }}
+            >
+              <TextField
+                id="firstName"
+                name="firstName"
+                label="First Name"
+                variant="outlined"
+                fullWidth
+                margin="normal"
+                InputLabelProps={{
+                  style: { color: "black" },
+                }}
+                InputProps={{
+                  style: { color: "black", padding: "10px 0" },
+                }}
+                value={formData.firstName}
+                onChange={handleInputChange}
+                required
+              />
+              <TextField
+                id="lastName"
+                name="lastName"
+                label="Last Name"
+                variant="outlined"
+                fullWidth
+                margin="normal"
+                InputLabelProps={{
+                  style: { color: "black" },
+                }}
+                InputProps={{
+                  style: { color: "black", padding: "10px 0" },
+                }}
+                value={formData.lastName}
+                onChange={handleInputChange}
+                required
+              />
+              <TextField
+                id="cellNumber"
+                name="cellNumber"
+                label="Cell Number"
+                variant="outlined"
+                fullWidth
+                margin="normal"
+                InputLabelProps={{
+                  style: { color: "black" },
+                }}
+                InputProps={{
+                  style: { color: "black", padding: "10px 0" },
+                }}
+                value={formData.cellNumber}
+                onChange={handleInputChange}
+                required
+              />
+              <TextField
+                id="personalEmail"
+                name="personalEmail"
+                label="Personal Email"
+                variant="outlined"
+                fullWidth
+                margin="normal"
+                InputLabelProps={{
+                  style: { color: "black" },
+                }}
+                InputProps={{
+                  style: { color: "black", padding: "10px 0" },
+                }}
+                value={formData.personalEmail}
+                onChange={handleInputChange}
+                required
+              />{" "}
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                disabled={isSubmitting}
+                sx={{
+                  margin: "25px 0",
+                  background: "black",
+                  width: isMobile ? "200px" : "300px",
+                  fontSize: "20px",
+                  padding: "10px 0",
+                  marginTop: isMobile ? "50px" : "20px",
+                  "&:hover": {
+                    backgroundColor: "#19ff85",
+                    color: "black",
+                  },
+                }}
+              >
+                {isSubmitting ? "Submitting..." : "Submit"}
+              </Button>
+            </form>
+          </Box>
+        </div>
+      )}
 
       {showThankYouModal && (
-        <Modal
-          open={showThankYouModal}
-          onClose={() => setShowThankYouModal(false)}
-          aria-labelledby="thank-you-modal"
-          aria-describedby="thank-you-message"
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            backgroundColor: "black",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 9999,
+          }}
         >
           <JobDetailsWrapper>
             <Box sx={styles.container}>
@@ -313,7 +325,7 @@ const CustomModal: React.FC<Props> = ({ open, onClose, jobDetails }) => {
               </Button>
             </Box>
           </JobDetailsWrapper>
-        </Modal>
+        </div>
       )}
     </>
   );
