@@ -139,7 +139,7 @@ export default function AccordionUsage({ jobDetails }: AccordionUsageProps) {
                   gap: "20px",
                 }}
               >
-                <Box>
+                <Box sx={{width: "100%",textAlign:"left"}}>
                   {job.JobDescription.split(". ").map(
                     (sentence, index, array) => {
                       // Trim whitespace from the beginning and end of the sentence
